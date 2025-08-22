@@ -29,5 +29,11 @@ export default defineConfig({
         ]
       }
     })
-  ]
+  ],
+  server: {
+    allowedHosts: [
+      'localhost',
+      'devserver-main--gbpwatest.netlify.app'
+    ]
+  }
 })
