@@ -1,0 +1,17 @@
+const API_BASE = "https://eyespace.co.in/gberp/hr/attendance.php";
+
+export async function fetchUserById(empId) {
+  const formData = new FormData();
+  formData.append("action", "getUser");
+  formData.append("emp_id", empId);
+
+  const response = await fetch(API_BASE, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+  return await response.json();
+}

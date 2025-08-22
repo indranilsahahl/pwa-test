@@ -1,87 +1,157 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import { fetchUserById } from "./api";
 
-function App() {
-  const [location, setLocation] = useState(null);
+function haversineDistance(lat1, lon1, lat2, lon2) {
+  function toRad(x) {
+    return (x * Math.PI) / 180;
+  }
+
+  const R = 6371000; // meters
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) *
+      Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return Math.round(R * c);
+}
+
+export default function App() {
+  const [empId, setEmpId] = useState("");
+  const [userData, setUserData] = useState([]);
+  const [location, setLocation] = useState({ lat: null, lon: null });
+  const [distance, setDistance] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [snapshot, setSnapshot] = useState(null);
 
-  const videoRef = useRef(null);
-  const canvasRef = useRef(null);
-
-  // Capture Location
+  // capture user location
   useEffect(() => {
-    if ("geolocation" in navigator) {
+    if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
+        (pos) => {
           setLocation({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-            accuracy: position.coords.accuracy, // ✅ accuracy in meters
+            lat: pos.coords.latitude,
+            lon: pos.coords.longitude,
           });
         },
-        (err) => setError(err.message),
-        { enableHighAccuracy: true } // ✅ request GPS-level accuracy if available
+        (err) => {
+          console.error(err);
+          setError("Unable to fetch location");
+        },
+        { enableHighAccuracy: true }
       );
     } else {
-      setError("Geolocation not supported by this browser.");
+      setError("Geolocation not supported");
     }
   }, []);
 
-  // Start Camera
-  useEffect(() => {
-    async function enableCamera() {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-        });
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    try {
+      const data = await fetchUserById(empId);
+      setUserData(data);
+
+      if (data.length > 0 && location.lat && location.lon) {
+        const userLoc = data[0];
+        if (userLoc.loc_lat && userLoc.loc_long) {
+          const dist = haversineDistance(
+            location.lat,
+            location.lon,
+            parseFloat(userLoc.loc_lat),
+            parseFloat(userLoc.loc_long)
+          );
+          setDistance(dist);
+        } else {
+          setDistance(null);
         }
-      } catch (err) {
-        setError("Camera access denied or not available.");
       }
+    } catch (err) {
+      console.error(err);
+      setError("Failed to fetch user data");
+    } finally {
+      setLoading(false);
     }
-    enableCamera();
-  }, []);
+  };
 
-  // Take Snapshot
-  const takeSnapshot = () => {
-    const context = canvasRef.current.getContext("2d");
-    context.drawImage(videoRef.current, 0, 0, 320, 240);
-    setSnapshot(canvasRef.current.toDataURL("image/png"));
+  const getRowClass = (dist) => {
+    if (dist === null) return "bg-white";
+    if (dist <= 100) return "bg-green-100";
+    if (dist <= 500) return "bg-yellow-100";
+    return "bg-red-100";
   };
 
   return (
-    <div className="p-4">
-      <h1>📍 PWA Demo</h1>
+    <div className="p-6 max-w-3xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Employee Attendance Lookup</h1>
 
-      {location ? (
-        <p>
-          <strong>Latitude:</strong> {location.lat} <br />
-          <strong>Longitude:</strong> {location.lng} <br />
-          <strong>Accuracy:</strong> ±{location.accuracy} meters
+      {/* Current location display */}
+      <div className="mb-4">
+        <p className="text-gray-700">
+          <strong>Current Location:</strong>{" "}
+          {location.lat && location.lon
+            ? `${location.lat}, ${location.lon}`
+            : "Fetching..."}
         </p>
-      ) : error ? (
-        <p style={{ color: "red" }}>{error}</p>
-      ) : (
-        <p>Getting location…</p>
-      )}
-
-      <div>
-        <video ref={videoRef} autoPlay playsInline width="320" height="240" />
-        <br />
-        <button onClick={takeSnapshot}>📸 Take Snapshot</button>
-        <canvas ref={canvasRef} width="320" height="240" style={{ display: "none" }} />
       </div>
 
-      {snapshot && (
-        <div>
-          <h3>Snapshot:</h3>
-          <img src={snapshot} alt="snapshot" />
-        </div>
+      {/* Input Form */}
+      <form onSubmit={handleSubmit} className="mb-6 flex space-x-2">
+        <input
+          type="text"
+          value={empId}
+          onChange={(e) => setEmpId(e.target.value)}
+          placeholder="Enter Employee ID"
+          className="border p-2 flex-1 rounded-lg"
+          required
+        />
+        <button
+          type="submit"
+          className="bg-blue-600 text-white px-4 py-2 rounded-lg"
+        >
+          {loading ? "Loading..." : "Fetch"}
+        </button>
+      </form>
+
+      {/* Error */}
+      {error && <p className="text-red-600 mb-4">{error}</p>}
+
+      {/* Results Table */}
+      {userData.length > 0 && (
+        <table className="w-full border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-gray-200">
+              <th className="border p-2">Emp ID</th>
+              <th className="border p-2">Name</th>
+              <th className="border p-2">Branch</th>
+              <th className="border p-2">Device ID</th>
+              <th className="border p-2">DB Latitude</th>
+              <th className="border p-2">DB Longitude</th>
+              <th className="border p-2">Distance (m)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {userData.map((user, index) => (
+              <tr key={index} className={`${getRowClass(distance)} border`}>
+                <td className="p-2 border">{user.emp_id}</td>
+                <td className="p-2 border">{user.emp_name}</td>
+                <td className="p-2 border">{user.branch_name}</td>
+                <td className="p-2 border">{user.device_id}</td>
+                <td className="p-2 border">{user.loc_lat}</td>
+                <td className="p-2 border">{user.loc_long}</td>
+                <td className="p-2 border font-semibold">
+                  {distance !== null ? `${distance} m` : "N/A"}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
     </div>
   );
 }
-
-export default App;
