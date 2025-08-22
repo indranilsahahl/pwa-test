@@ -8,8 +8,8 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: 'My First PWA',
-        short_name: 'MyPWA',
+        name: 'EsAttendance',
+        short_name: 'ESAttendance',
         description: 'A sample Progressive Web App deployed on Netlify',
         theme_color: '#ffffff',
         background_color: '#ffffff',
@@ -17,12 +17,12 @@ export default defineConfig({
         start_url: '/',
         icons: [
           {
-            src: '/icon-192x192.png',
+            src: '/android-chrome-192x192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: '/icon-512x512.png',
+            src: '/android-chrome-512x512.png',
             sizes: '512x512',
             type: 'image/png'
           }
