@@ -43,7 +43,7 @@ function App() {
       formData.append("action", "getUser");
       formData.append("emp_id", empId);
 
-      const response = await fetch("http://192.168.0.223/gberp/hr/attendance.php", {
+      const response = await fetch("https://eyespace.co.in/gberp/hr/attendance.php", {
         method: "POST",
         body: formData,
       });
