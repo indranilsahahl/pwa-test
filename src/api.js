@@ -13,5 +13,7 @@ export async function fetchUserById(empId) {
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
-  return await response.json();
+
+  const data = await response.json();
+  return Array.isArray(data) && data.length > 0 ? data[0] : null;
 }
