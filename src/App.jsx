@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { fetchUserById } from "./Api";
+import "./App.css";   // component-specific styles
+
 
 function App() {
   const [empId, setEmpId] = useState("");
