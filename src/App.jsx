@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-import { login } from "./Api";
+import { login } from "./api.js";
 import Dashboard from "./Dashboard";
 import "./index.css";
 
