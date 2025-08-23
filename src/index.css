@@ -66,3 +66,27 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+#logo_div {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #9090A0;
+  display: flex;
+  background: transparent url("/gberp/images/sysimages/eyespace_logo_36x32.png") no-repeat left center;
+}
+#logo_txt {
+  user-select: none;
+  margin-left: 45px;
+  font-size: 28px;
+  font-weight: 600;
+  color: #45C0AE;
+}
+#signin_div {
+  margin: 50px auto auto;
+}
+#log_frm {
+  border: none;
+  background: none;
+  padding: 0px;
+  margin: 0px;
+}
+

@@ -1,187 +1,132 @@
-import { useEffect, useState } from "react";
-import { fetchUserById } from "./api.js";
-import "./App.css";   // component-specific styles
+import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { login } from "./Api";
+import Dashboard from "./Dashboard";
+import "./index.css";
 
-
-function App() {
+// Login Page Component
+function LoginPage() {
   const [empId, setEmpId] = useState("");
-  const [userData, setUserData] = useState(null);
+  const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const [location, setLocation] = useState({ lat: null, long: null });
-  const [installPrompt, setInstallPrompt] = useState(null);
+  const [showError, setShowError] = useState(false);
+  const navigate = useNavigate();
 
-  // ✅ Capture user's location
-  useEffect(() => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          setLocation({
-            lat: pos.coords.latitude,
-            long: pos.coords.longitude,
-          });
-        },
-        (err) => console.error("Geolocation error:", err),
-        { enableHighAccuracy: true }
-      );
-    }
-  }, []);
-
-  // ✅ Listen for beforeinstallprompt event
-  useEffect(() => {
-    const handler = (e) => {
-      e.preventDefault();
-      setInstallPrompt(e); // save the event for later use
-    };
-    window.addEventListener("beforeinstallprompt", handler);
-    return () => window.removeEventListener("beforeinstallprompt", handler);
-  }, []);
-
-  // ✅ Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!empId) return;
+    setError(null);
 
     try {
-      const data = await fetchUserById(empId);
-      if (data) {
-        setUserData(data);
-        setError(null);
+      const result = await login(empId, password);
+
+      if (result.success) {
+        localStorage.setItem("empId", result.empId);
+        localStorage.setItem("token", result.token);
+        navigate("/dashboard");
       } else {
-        setUserData(null);
-        setError("No user found");
+        setError(result.message || "Invalid login credentials");
+        setShowError(true);
       }
     } catch (err) {
-      console.error(err);
-      setError(err.message);
-      setUserData(null);
+      setError("Server error. Please try again.");
+      setShowError(true);
     }
-  };
-
-  // ✅ Calculate distance (Haversine)
-  const calculateDistance = (lat1, lon1, lat2, lon2) => {
-    if (
-      lat1 === null || lon1 === null ||
-      lat2 === null || lon2 === null
-    ) return null;
-
-    const R = 6371000; // metres
-    const toRad = (deg) => (deg * Math.PI) / 180;
-
-    const φ1 = toRad(lat1);
-    const φ2 = toRad(lat2);
-    const Δφ = toRad(lat2 - lat1);
-    const Δλ = toRad(lon2 - lon1);
-
-    const a =
-      Math.sin(Δφ / 2) ** 2 +
-      Math.cos(φ1) * Math.cos(φ2) *
-      Math.sin(Δλ / 2) ** 2;
-
-    return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
-  };
-
-  const distance =
-    userData
-      ? calculateDistance(
-          location.lat,
-          location.long,
-          parseFloat(userData.loc_lat),
-          parseFloat(userData.loc_long)
-        )
-      : null;
-
-  // ✅ Handle install click
-  const handleInstallClick = async () => {
-    if (!installPrompt) return;
-    installPrompt.prompt();
-    const { outcome } = await installPrompt.userChoice;
-    console.log("User choice:", outcome);
-    setInstallPrompt(null);
   };
 
   return (
-    <div className="p-6 font-sans">
-      <h1 className="text-2xl font-bold mb-4">EsAttendance</h1>
-
-      {/* Location display */}
-      {location.lat && location.long ? (
-        <p className="mb-2">
-          Current Location: {location.lat.toFixed(6)}, {location.long.toFixed(6)}
-        </p>
-      ) : (
-        <p className="mb-2 text-gray-500">Fetching location...</p>
-      )}
-
-      {/* Form */}
-      <form onSubmit={handleSubmit} className="mb-4">
-        <input
-          type="text"
-          value={empId}
-          onChange={(e) => setEmpId(e.target.value)}
-          placeholder="Enter Employee ID"
-          className="border p-2 mr-2 rounded"
-        />
-        <button
-          type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded"
-        >
-          Submit
-        </button>
-      </form>
-
-      {/* Install button (only shows if available) */}
-      {installPrompt && (
-        <button
-          onClick={handleInstallClick}
-          className="bg-green-600 text-white px-4 py-2 rounded mb-4"
-        >
-          📲 Install App
-        </button>
-      )}
-
-      {/* Error */}
-      {error && <p className="text-red-600">{error}</p>}
-
-      {/* User Data Table */}
-      {userData && !error && (
-        <div className="overflow-x-auto">
-          <table className="border-collapse border border-gray-400 w-full text-sm">
-            <thead>
-              <tr className="bg-gray-200">
-                <th className="border border-gray-400 px-2 py-1">Emp ID</th>
-                <th className="border border-gray-400 px-2 py-1">Name</th>
-                <th className="border border-gray-400 px-2 py-1">Branch</th>
-                <th className="border border-gray-400 px-2 py-1">Device ID</th>
-                <th className="border border-gray-400 px-2 py-1">DB Latitude</th>
-                <th className="border border-gray-400 px-2 py-1">DB Longitude</th>
-                <th className="border border-gray-400 px-2 py-1">Distance (m)</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                className={
-                  distance !== null
-                    ? distance < 100
-                      ? "bg-green-100"
-                      : "bg-red-100"
-                    : ""
-                }
-              >
-                <td className="border border-gray-400 px-2 py-1">{userData.emp_id}</td>
-                <td className="border border-gray-400 px-2 py-1">{userData.emp_name}</td>
-                <td className="border border-gray-400 px-2 py-1">{userData.branch_name}</td>
-                <td className="border border-gray-400 px-2 py-1">{userData.device_id}</td>
-                <td className="border border-gray-400 px-2 py-1">{userData.loc_lat}</td>
-                <td className="border border-gray-400 px-2 py-1">{userData.loc_long}</td>
-                <td className="border border-gray-400 px-2 py-1">
-                  {distance !== null ? `${distance} m` : "N/A"}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+    <div className="gb_body_2 gb_font_1">
+      {showError && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 z-[301] flex justify-center items-center">
+          <div className="w-[400px] relative p-5 rounded-lg bg-gradient-to-b from-white to-gray-400">
+            <button
+              onClick={() => setShowError(false)}
+              className="absolute -top-3 -right-3 bg-gray-600 text-white w-6 h-6 rounded-full shadow"
+            >
+              X
+            </button>
+            <div>
+              <p>{error}</p>
+            </div>
+          </div>
         </div>
       )}
+
+      <div className="flex justify-center items-center h-screen">
+        <div className="p-6 border rounded shadow bg-white w-[350px]">
+          <div
+            className="mb-4 flex items-center border-b border-gray-400 bg-no-repeat bg-left bg-transparent"
+            style={{
+              backgroundImage:
+                'url("https://eyespace.co.in/gberp/images/sysimages/eyespace_logo_36x32.png")',
+            }}
+          >
+            <span className="ml-12 text-2xl font-semibold text-[#45C0AE] select-none">
+              Eye Space
+            </span>
+          </div>
+
+          <form onSubmit={handleSubmit} className="flex flex-col space-y-3">
+            <input
+              type="text"
+              placeholder="Employee ID"
+              value={empId}
+              onChange={(e) => setEmpId(e.target.value)}
+              required
+              className="border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
+            />
+            <button
+              type="submit"
+              className="bg-[#45C0AE] text-white py-2 rounded hover:bg-[#3aa595] transition"
+            >
+              Sign In
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
+  );
+}
+
+// Wrapper to check auth before rendering Routes
+function AuthWrapper({ children }) {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const empId = localStorage.getItem("empId");
+    const token = localStorage.getItem("token");
+
+    if (empId && token) {
+      navigate("/dashboard");
+    } else {
+      navigate("/");
+    }
+    setLoading(false);
+  }, [navigate]);
+
+  if (loading) return <p>Loading...</p>;
+  return children;
+}
+
+// Root App Component
+function App() {
+  return (
+    <BrowserRouter>
+      <AuthWrapper>
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </AuthWrapper>
+    </BrowserRouter>
   );
 }
 
