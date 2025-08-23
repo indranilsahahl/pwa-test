@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchUserById } from "./Api";
+import { fetchUserById } from "./api.js";
 import "./App.css";   // component-specific styles
 
 
