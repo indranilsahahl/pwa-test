@@ -15,17 +15,9 @@ export async function login(empId, password) {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }
 
-  const text = await response.text();
-  console.log("Raw body:", text);
-
-  try {
-    const json = JSON.parse(text);
-    console.log("Parsed JSON:", json);
-    return json;
-  } catch (err) {
-    console.error("JSON parse error:", err);
-    throw new Error("Invalid JSON from server");
-  }
+  const json = await response.json();
+  console.log("Login Parsed JSON:", json);
+  return json;
 }
 
 export async function claimDevice(empId) {
@@ -42,15 +34,7 @@ export async function claimDevice(empId) {
     throw new Error("Network response was not ok");
   }
 
-  const text = await response.text();
-  console.log("Claim Raw body:", text);
-
-  try {
-    const json = JSON.parse(text);
-    console.log("Claim Parsed JSON:", json);
-    return json;  // expected { Stat: "OK", token: "xxxxx" }
-  } catch (err) {
-    console.error("JSON parse error:", err);
-    throw new Error("Invalid JSON from server");
-  }
+  const json = await response.json();
+  console.log("Claim Parsed JSON:", json);
+  return json; // expected { Stat: "OK", token: "xxxxx" }
 }
