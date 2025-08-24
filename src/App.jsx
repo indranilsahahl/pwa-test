@@ -35,27 +35,27 @@ function LoginPage() {
   setError(""); // reset any previous error
 
   try {
-    const data = await login(empId, password);
-    let pdata = JSON.parse(data);
+    const data = await login(empId, password); // Already an object
     console.log("Login response:", data);
 
-    // Save all fields in sessionStorage
-    sessionStorage.setItem("Stat", pdata.Stat);
-    sessionStorage.setItem("empl_id", pdata.empl_id);
-    sessionStorage.setItem("br_lat", pdata.br_lat);
-    sessionStorage.setItem("br_long", pdata.br_long);
-    sessionStorage.setItem("token", pdata.token);
-    sessionStorage.setItem("Claim_stat", pdata.Claim_Stat);
-    sessionStorage.setItem("Emp_name", pdata.Name);
-    sessionStorage.setItem("home_branch", pdata.home_branch);
+	// Save to sessionStorage directly
+	sessionStorage.setItem("Stat", data.Stat);
+	sessionStorage.setItem("empl_id", data.empl_id);
+	sessionStorage.setItem("br_lat", data.br_lat);
+	sessionStorage.setItem("br_long", data.br_long);
+	sessionStorage.setItem("token", data.token);
+	sessionStorage.setItem("Claim_stat", data.Claim_Stat);
+	sessionStorage.setItem("Emp_name", data.Name);
+	sessionStorage.setItem("home_branch", data.home_branch);
 
-    setTokenStatus(pdata.token || "No Token");
+	setTokenStatus(data.token || "No Token");
 
-    if (pdata.Stat === "OK") {
-      navigate("/dashboard"); // ✅ redirect
-    } else {
-      setError("Login failed: " + (data.message || "Invalid credentials"));
-    }
+	if (data.Stat === "OK") {
+  		navigate("/dashboard");
+	} else {
+  		setError("Login failed: " + (data.message || "Invalid credentials"));
+	}
+
   } catch (err) {
     console.error("Login error:", err);
     setError("Network or server error. Please try again.");
