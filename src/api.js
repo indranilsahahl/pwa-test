@@ -1,8 +1,36 @@
 const API_BASE = "https://eyespace.co.in/gberp/hr/attendance.php";
 
-export async function fetchUserById(empId) {
+export async function login(empId, password) {
   const formData = new FormData();
-  formData.append("action", "getUser");
+  formData.append("action", "login");
+  formData.append("emp_id", empId);
+  formData.append("pass", password);
+
+  const response = await fetch(API_BASE, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! Status: ${response.status}`);
+  }
+
+  const text = await response.text();
+  console.log("Raw body:", text);
+
+  try {
+    const json = JSON.parse(text);
+    console.log("Parsed JSON:", json);
+    return json;
+  } catch (err) {
+    console.error("JSON parse error:", err);
+    throw new Error("Invalid JSON from server");
+  }
+}
+
+export async function claimDevice(empId) {
+  const formData = new FormData();
+  formData.append("action", "claimDevice");
   formData.append("emp_id", empId);
 
   const response = await fetch(API_BASE, {
@@ -14,26 +42,15 @@ export async function fetchUserById(empId) {
     throw new Error("Network response was not ok");
   }
 
-  const data = await response.json();
-  return Array.isArray(data) && data.length > 0 ? data[0] : null;
+  const text = await response.text();
+  console.log("Claim Raw body:", text);
+
+  try {
+    const json = JSON.parse(text);
+    console.log("Claim Parsed JSON:", json);
+    return json;  // expected { Stat: "OK", token: "xxxxx" }
+  } catch (err) {
+    console.error("JSON parse error:", err);
+    throw new Error("Invalid JSON from server");
+  }
 }
-
-export async function login(empId, password) {
-  const formData = new FormData();
-  formData.append("action", "login");
-  formData.append("emp_id", empId);
-  formData.append("password", password);
-
-  const response = await fetch(API_BASE, {
-    method: "POST",
-    body: formData,
-  });
-
-  if (!response.ok) {
-    throw new Error("Network error");
-  }
-  
-  // ✅ Add this return
-  const data = await response.json();
-  return data;
-  }

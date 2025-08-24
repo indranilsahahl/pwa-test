@@ -1,41 +1,68 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate, BrowserRouter, Routes, Route } from "react-router-dom";
+import { login } from "./api.js";
+import Dashboard from "./Dashboard";
 
+// ---------------- LOGIN PAGE ----------------
 function LoginPage() {
   const [empId, setEmpId] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [tokenStatus, setTokenStatus] = useState("Not Logged In");
   const [location, setLocation] = useState(null);
-  const [tokenStatus, setTokenStatus] = useState("Not Found");
 
+  const navigate = useNavigate();
+
+  // ✅ Get location on mount
   useEffect(() => {
-    // ✅ Check token in localStorage
-    const token = localStorage.getItem("token");
-    setTokenStatus(token ? "Present" : "Not Found");
-
-    // ✅ Get geolocation
-    if ("geolocation" in navigator) {
+    if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (pos) => {
+        (pos) =>
           setLocation({
-            lat: pos.coords.latitude.toFixed(6),
-            lon: pos.coords.longitude.toFixed(6),
-            accuracy: pos.coords.accuracy.toFixed(2),
-          });
-        },
-        (err) => {
-          setLocation({ error: err.message });
-        },
-        { enableHighAccuracy: true, timeout: 5000 }
+            lat: pos.coords.latitude,
+            lon: pos.coords.longitude,
+            accuracy: pos.coords.accuracy,
+          }),
+        (err) => setLocation({ error: err.message })
       );
     } else {
       setLocation({ error: "Geolocation not supported" });
     }
   }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Submitted:", empId, password);
-    // call your login API here
-  };
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  setError(""); // reset any previous error
+
+  try {
+    const data = await login(empId, password);
+    let pdata = JSON.parse(data);
+    console.log("Login response:", data);
+
+    // Save all fields in sessionStorage
+    sessionStorage.setItem("Stat", pdata.Stat);
+    sessionStorage.setItem("empl_id", pdata.empl_id);
+    sessionStorage.setItem("br_lat", pdata.br_lat);
+    sessionStorage.setItem("br_long", pdata.br_long);
+    sessionStorage.setItem("token", pdata.token);
+    sessionStorage.setItem("Claim_stat", pdata.Claim_Stat);
+    sessionStorage.setItem("Emp_name", pdata.Name);
+    sessionStorage.setItem("home_branch", pdata.home_branch);
+
+    setTokenStatus(pdata.token || "No Token");
+
+    if (pdata.Stat === "OK") {
+      navigate("/dashboard"); // ✅ redirect
+    } else {
+      setError("Login failed: " + (data.message || "Invalid credentials"));
+    }
+  } catch (err) {
+    console.error("Login error:", err);
+    setError("Network or server error. Please try again.");
+  }
+};
+
+
 
   return (
     <div id="top_level">
@@ -51,7 +78,9 @@ function LoginPage() {
               />
             </td>
             <td>
-              <span className="gb_font_2">EYE SPACE <br /></span>
+              <span className="gb_font_2">
+                EYE SPACE <br />
+              </span>
             </td>
           </tr>
         </tbody>
@@ -81,7 +110,8 @@ function LoginPage() {
             <tr className="gb_box_1 gb_tb_border_all">
               <th className="gb_box_1 gb_tb_border_all">
                 <input
-                  type="text"
+                  name="emp_id"
+                  type="number"
                   placeholder="Employee ID"
                   value={empId}
                   onChange={(e) => setEmpId(e.target.value)}
@@ -93,6 +123,7 @@ function LoginPage() {
             <tr className="gb_tb_border_all">
               <th className="gb_tb_border_all">
                 <input
+                  name="pass"
                   type="password"
                   placeholder="Password"
                   value={password}
@@ -118,7 +149,9 @@ function LoginPage() {
         <table className="gb_table_1 gb_tb_border_all gb_center">
           <thead>
             <tr>
-              <th colSpan="2" className="gb_tb_border_all">Device Status</th>
+              <th colSpan="2" className="gb_tb_border_all">
+                Device Status
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -147,8 +180,23 @@ function LoginPage() {
           </tbody>
         </table>
       </div>
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }
 
-export default LoginPage;
+// ---------------- APP ROUTER ----------------
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+// ✅ Export the right component
+export default App;

@@ -26,6 +26,7 @@ body {
   margin: auto;
   display: flex;
   place-items: center;
+  color: black;
   min-width: 320px;
   min-height: 100vh;
   background:linear-gradient(to top, rgba(69, 192, 174, 1), rgba(69, 192, 174, .2));
@@ -105,3 +106,10 @@ button:focus-visible {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* raised effect */
   margin-top: 5px; /* space below logo */
 }
+.green-100 {
+  background:green;
+}
+.red-100 {
+  background:red;
+}
+

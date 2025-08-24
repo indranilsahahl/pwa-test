@@ -1,16 +1,33 @@
 import { useEffect, useState } from "react";
-import { fetchUserById } from "./api.js";
+import { claimDevice } from "./api";
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
   const [location, setLocation] = useState({ lat: null, long: null });
   const [distance, setDistance] = useState(null);
+  const [message, setMessage] = useState("");
 
-  // Fetch user data from empId in localStorage
+  // Load user from sessionStorage
   useEffect(() => {
-    const empId = localStorage.getItem("empId");
-    if (empId) {
-      fetchUserById(empId).then(setUser).catch(console.error);
+    const empId = sessionStorage.getItem("empl_id");
+    const stat = sessionStorage.getItem("Stat");
+    const br_lat = sessionStorage.getItem("br_lat");
+    const br_long = sessionStorage.getItem("br_long");
+    const token = sessionStorage.getItem("token"); // might be null
+    const claim_stat = sessionStorage.getItem("Claim_stat");
+    const e_name = sessionStorage.getItem("Emp_name");
+    const home_branch = sessionStorage.getItem("home_branch");
+
+    if (empId && stat === "OK") {
+      setUser({
+        empId,
+        e_name,
+        home_branch,
+        br_lat: parseFloat(br_lat),
+        br_long: parseFloat(br_long),
+        token,
+        claim_stat,
+      });
     }
   }, []);
 
@@ -22,15 +39,16 @@ export default function Dashboard() {
           setLocation({
             lat: pos.coords.latitude,
             long: pos.coords.longitude,
+            accuracy: pos.coords.accuracy,
           });
         },
-        (err) => console.error(err),
+        (err) => console.error("Geolocation error:", err),
         { enableHighAccuracy: true }
       );
     }
   }, []);
 
-  // Calculate distance when user data and location are available
+  // Calculate distance when user & location available
   useEffect(() => {
     if (!user || !location.lat || !location.long) return;
 
@@ -38,70 +56,109 @@ export default function Dashboard() {
     const toRad = (deg) => (deg * Math.PI) / 180;
 
     const φ1 = toRad(location.lat);
-    const φ2 = toRad(user.loc_lat);
-    const Δφ = toRad(user.loc_lat - location.lat);
-    const Δλ = toRad(user.loc_long - location.long);
+    const φ2 = toRad(user.br_lat);
+    const Δφ = toRad(user.br_lat - location.lat);
+    const Δλ = toRad(user.br_long - location.long);
 
     const a =
-      Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-      Math.cos(φ1) * Math.cos(φ2) *
-      Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+      Math.sin(Δφ / 2) ** 2 +
+      Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) ** 2;
 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     setDistance(Math.round(R * c));
   }, [user, location]);
 
+  async function handleClaim() {
+    if (!user) return;
+
+    try {
+      const result = await claimDevice(user.empId);
+      if (result.Stat === "OK") {
+        localStorage.setItem("token", result.token); // ✅ only store on success
+        setUser((prev) => ({ ...prev, token: result.token, claim_stat: "Y" }));
+        setMessage("Device claimed successfully!");
+      } else {
+        setMessage("Device claim failed. Try again.");
+      }
+    } catch (err) {
+      console.error("Claim error:", err);
+      setMessage("Error claiming device.");
+    }
+  }
+
   if (!user) return <p className="p-4">Loading user data...</p>;
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+    <div>
+      <h1>Dashboard</h1>
 
       {/* Show current location */}
       {location.lat && location.long ? (
-        <p className="mb-2">
-          Current Location: {location.lat.toFixed(6)}, {location.long.toFixed(6)}
+        <p>
+          Current Location: <br /> Lat: {location.lat.toFixed(6)} <br />
+          Long: {location.long.toFixed(6)} <br />
+          Accuracy: &plusmn; {location?.accuracy || "Loading..."} meters
         </p>
       ) : (
-        <p className="mb-2 text-gray-500">Fetching location...</p>
+        <p>Fetching location...</p>
       )}
 
       {/* User data table */}
-      <div className="overflow-x-auto">
-        <table className="border-collapse border border-gray-400 w-full text-sm">
+      <div>
+        <table>
           <thead>
-            <tr className="bg-gray-200">
-              <th className="border border-gray-400 px-2 py-1">Emp ID</th>
-              <th className="border border-gray-400 px-2 py-1">Name</th>
-              <th className="border border-gray-400 px-2 py-1">Branch</th>
-              <th className="border border-gray-400 px-2 py-1">Device ID</th>
-              <th className="border border-gray-400 px-2 py-1">DB Latitude</th>
-              <th className="border border-gray-400 px-2 py-1">DB Longitude</th>
-              <th className="border border-gray-400 px-2 py-1">Distance (m)</th>
+            <tr>
+              <th>Emp ID</th>
+              <td>{user.empId}</td>
             </tr>
-          </thead>
-          <tbody>
+            <tr>
+              <th>Name</th>
+              <td>{user.e_name}</td>
+            </tr>
+            <tr>
+              <th>Home Branch</th>
+              <td>{user.home_branch}</td>
+            </tr>
+            <tr>
+              <th>Device Token</th>
+              <td>{user.token || "Not Claimed"}</td>
+            </tr>
+            <tr>
+              <th>Branch Latitude</th>
+              <td>{user.br_lat}</td>
+            </tr>
+            <tr>
+              <th>Branch Longitude</th>
+              <td>{user.br_long}</td>
+            </tr>
             <tr
               className={
                 distance !== null
                   ? distance < 100
-                    ? "bg-green-100"
-                    : "bg-red-100"
+                    ? "green-100"
+                    : "red-100"
                   : ""
               }
             >
-              <td className="border border-gray-400 px-2 py-1">{user.emp_id}</td>
-              <td className="border border-gray-400 px-2 py-1">{user.emp_name}</td>
-              <td className="border border-gray-400 px-2 py-1">{user.branch_name}</td>
-              <td className="border border-gray-400 px-2 py-1">{user.device_id}</td>
-              <td className="border border-gray-400 px-2 py-1">{user.loc_lat}</td>
-              <td className="border border-gray-400 px-2 py-1">{user.loc_long}</td>
-              <td className="border border-gray-400 px-2 py-1">
-                {distance !== null ? `${distance} m` : "N/A"}
-              </td>
+              <th>Distance (m)</th>
+              <td>{distance !== null ? `${distance} m` : "N/A"}</td>
             </tr>
-          </tbody>
+            <tr>
+              <th>Claim Stat</th>
+              <td>{user.claim_stat}</td>
+            </tr>
+          </thead>
         </table>
+      </div>
+
+      {/* Claim Section */}
+      <div className="mt-4">
+        {user.claim_stat === "N" ? (
+          <button onClick={handleClaim}>Claim This Device</button>
+        ) : (
+          <p>User Already Registered</p>
+        )}
+        {message && <p>{message}</p>}
       </div>
     </div>
   );
