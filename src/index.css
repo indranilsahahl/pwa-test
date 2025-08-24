@@ -23,11 +23,12 @@ a:hover {
 }
 
 body {
-  margin: 0;
+  margin: auto;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background:linear-gradient(to top, rgba(69, 192, 174, 1), rgba(69, 192, 174, .2));
 }
 
 h1 {
@@ -67,19 +68,16 @@ button:focus-visible {
   }
 }
 
-#logo_div {
-  margin-bottom: 10px;
-  border-bottom: 1px solid #9090A0;
-  display: flex;
-  background: transparent url("/gberp/images/sysimages/eyespace_logo_36x32.png") no-repeat left center;
+.logo_txt {
+  color: #000;
+  background: #fAfAff;                  /* needs a background for shadow to show */
+  padding: 5px 5px;                /* spacing around text/logo */
+  border-radius: 10px;               /* rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  /* the “raised” shadow */
+  align-items: center;
+  justify-content: flex-start;  /* ✅ correct */
 }
-#logo_txt {
-  user-select: none;
-  margin-left: 45px;
-  font-size: 28px;
-  font-weight: 600;
-  color: #45C0AE;
-}
+
 #signin_div {
   margin: 50px auto auto;
 }
@@ -90,3 +88,20 @@ button:focus-visible {
   margin: 0px;
 }
 
+#top_level { 
+  display: flex;
+  flex-direction: column;     /* stack logo + form */
+  align-items: center;        /* center horizontally */
+  justify-content: flex-start; /* keep them at the top */
+  min-height: 100vh;          /* full page height */
+  padding-top: 0px;          /* optional: spacing from very top */
+  z-index: 100;
+}
+#u_logo {margin:auto 10px auto 0px; padding:0px;}
+.login_card {
+  background: #f0f0f0; /* needs a background */
+  padding: 5px;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* raised effect */
+  margin-top: 5px; /* space below logo */
+}

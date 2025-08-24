@@ -1,133 +1,154 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-import { login } from "./api.js";
-import Dashboard from "./Dashboard";
-import "./index.css";
 
-// Login Page Component
 function LoginPage() {
   const [empId, setEmpId] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
-  const [showError, setShowError] = useState(false);
-  const navigate = useNavigate();
+  const [location, setLocation] = useState(null);
+  const [tokenStatus, setTokenStatus] = useState("Not Found");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null);
+  useEffect(() => {
+    // ✅ Check token in localStorage
+    const token = localStorage.getItem("token");
+    setTokenStatus(token ? "Present" : "Not Found");
 
-    try {
-      const result = await login(empId, password);
-
-      if (result.success) {
-        localStorage.setItem("empId", result.empId);
-        localStorage.setItem("token", result.token);
-        navigate("/dashboard");
-      } else {
-        setError(result.message || "Invalid login credentials");
-        setShowError(true);
-      }
-    } catch (err) {
-      setError("Server error. Please try again.");
-      setShowError(true);
+    // ✅ Get geolocation
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setLocation({
+            lat: pos.coords.latitude.toFixed(6),
+            lon: pos.coords.longitude.toFixed(6),
+            accuracy: pos.coords.accuracy.toFixed(2),
+          });
+        },
+        (err) => {
+          setLocation({ error: err.message });
+        },
+        { enableHighAccuracy: true, timeout: 5000 }
+      );
+    } else {
+      setLocation({ error: "Geolocation not supported" });
     }
+  }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Submitted:", empId, password);
+    // call your login API here
   };
 
   return (
-    <div className="gb_body_2 gb_font_1">
-      {showError && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 z-[301] flex justify-center items-center">
-          <div className="w-[400px] relative p-5 rounded-lg bg-gradient-to-b from-white to-gray-400">
-            <button
-              onClick={() => setShowError(false)}
-              className="absolute -top-3 -right-3 bg-gray-600 text-white w-6 h-6 rounded-full shadow"
-            >
-              X
-            </button>
-            <div>
-              <p>{error}</p>
-            </div>
-          </div>
-        </div>
-      )}
+    <div id="top_level">
+      {/* Logo */}
+      <table className="logo_txt">
+        <tbody>
+          <tr>
+            <td>
+              <img
+                id="u_logo"
+                src="https://eyespace.co.in/gberp/images/sysimages/eyespace_logo_36x32.png"
+                alt="Eye Space Logo"
+              />
+            </td>
+            <td>
+              <span className="gb_font_2">EYE SPACE <br /></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-      <div className="flex justify-center items-center h-screen">
-        <div className="p-6 border rounded shadow bg-white w-[350px]">
-          <div
-            className="mb-4 flex items-center border-b border-gray-400 bg-no-repeat bg-left bg-transparent"
-            style={{
-              backgroundImage:
-                'url("https://eyespace.co.in/gberp/images/sysimages/eyespace_logo_36x32.png")',
-            }}
-          >
-            <span className="ml-12 text-2xl font-semibold text-[#45C0AE] select-none">
-              Eye Space
-            </span>
-          </div>
+      {/* Welcome text */}
+      <div className="gb_font_1 gb_center">
+        Welcome to Eye Space Attendance System. <br />
+        Please use the following form to login. <br />
+        <ul>
+          <li>You should be an employee of Eye Space to use the system</li>
+          <li>Your employee ID is userid</li>
+          <li>Password hint - contact HO</li>
+          <li>Once logged In, you can register your device for attendance.</li>
+          <li>Only 1 device for an employee Can be registered</li>
+          <li>For Re-registration/Update device, contact HO</li>
+        </ul>
+      </div>
 
-          <form onSubmit={handleSubmit} className="flex flex-col space-y-3">
-            <input
-              type="text"
-              placeholder="Employee ID"
-              value={empId}
-              onChange={(e) => setEmpId(e.target.value)}
-              required
-              className="border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="border rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
-            />
-            <button
-              type="submit"
-              className="bg-[#45C0AE] text-white py-2 rounded hover:bg-[#3aa595] transition"
-            >
-              Sign In
-            </button>
-          </form>
-        </div>
+      {/* Login Form */}
+      <form onSubmit={handleSubmit} className="gb_center login_card">
+        <table className="gb_table_1 gb_tb_border_all gb_center">
+          <tbody>
+            <tr className="gb_tb_border_all">
+              <th className="gb_tb_border_all">Employee login</th>
+            </tr>
+            <tr className="gb_box_1 gb_tb_border_all">
+              <th className="gb_box_1 gb_tb_border_all">
+                <input
+                  type="text"
+                  placeholder="Employee ID"
+                  value={empId}
+                  onChange={(e) => setEmpId(e.target.value)}
+                  required
+                  className="gb_box_1"
+                />
+              </th>
+            </tr>
+            <tr className="gb_tb_border_all">
+              <th className="gb_tb_border_all">
+                <input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="gb_box_1"
+                />
+              </th>
+            </tr>
+            <tr className="gb_box_1 gb_tb_border_all">
+              <th className="gb_box_1 gb_tb_border_all">
+                <button type="submit" className="gb_btn_1 gb_btn_menu_blue">
+                  Sign In
+                </button>
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+
+      {/* ✅ Device Status */}
+      <div className="gb_center login_card" style={{ marginTop: "20px" }}>
+        <table className="gb_table_1 gb_tb_border_all gb_center">
+          <thead>
+            <tr>
+              <th colSpan="2" className="gb_tb_border_all">Device Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="gb_tb_border_all">Token</td>
+              <td className="gb_tb_border_all">{tokenStatus}</td>
+            </tr>
+            <tr>
+              <td className="gb_tb_border_all">Latitude</td>
+              <td className="gb_tb_border_all">
+                {location?.lat || location?.error || "Loading..."}
+              </td>
+            </tr>
+            <tr>
+              <td className="gb_tb_border_all">Longitude</td>
+              <td className="gb_tb_border_all">
+                {location?.lon || location?.error || "Loading..."}
+              </td>
+            </tr>
+            <tr>
+              <td className="gb_tb_border_all">Accuracy (m)</td>
+              <td className="gb_tb_border_all">
+                {location?.accuracy || location?.error || "Loading..."}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   );
 }
 
-// Wrapper to check auth before rendering Routes
-function AuthWrapper({ children }) {
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const empId = localStorage.getItem("empId");
-    const token = localStorage.getItem("token");
-
-    if (empId && token) {
-      navigate("/dashboard");
-    } else {
-      navigate("/");
-    }
-    setLoading(false);
-  }, [navigate]);
-
-  if (loading) return <p>Loading...</p>;
-  return children;
-}
-
-// Root App Component
-function App() {
-  return (
-    <BrowserRouter>
-      <AuthWrapper>
-        <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
-      </AuthWrapper>
-    </BrowserRouter>
-  );
-}
-
-export default App;
+export default LoginPage;
