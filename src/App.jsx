@@ -78,7 +78,7 @@ function LoginPage() {
               />
             </td>
             <td>
-              <span className="gb_font_2">
+              <span className="gb-title">
                 EYE SPACE <br />
               </span>
             </td>

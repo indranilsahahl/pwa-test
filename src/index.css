@@ -71,7 +71,7 @@ button:focus-visible {
 
 .logo_txt {
   color: #000;
-  background: #fAfAff;                  /* needs a background for shadow to show */
+  background: #89A481;                  /* needs a background for shadow to show */
   padding: 5px 5px;                /* spacing around text/logo */
   border-radius: 10px;               /* rounded corners */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  /* the “raised” shadow */
@@ -112,5 +112,11 @@ button:focus-visible {
 }
 .red-100 {
   background:red;
+}
+.gb-title {
+  font-size: 22px;
+  font-weight: 700;
+  color:crimson;
+  margin: 0;
 }
 

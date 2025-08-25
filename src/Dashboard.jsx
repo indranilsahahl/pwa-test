@@ -94,7 +94,7 @@ export default function Dashboard() {
   return (
     <div className="dashboard-container">
       <section classname="gb-card">
-      <table className="logo_txt gb-table">
+      <table className="logo_txt">
         <tbody>
           <tr>
             <td>
@@ -103,11 +103,6 @@ export default function Dashboard() {
                 src="https://eyespace.co.in/gberp/images/sysimages/eyespace_logo_36x32.png"
                 alt="Eye Space Logo"
               />
-            </td>
-            <td>
-              <span className="gb_font_2">
-                EYE SPACE <br />
-              </span>
             </td>
             <td> <h1 className="gb-title">Dashboard</h1>
         <button className="gb-btn danger" onClick={onLogout}>Logout</button> </td>
