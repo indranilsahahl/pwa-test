@@ -89,10 +89,10 @@ function LoginPage() {
       <div className="gb_font_1 gb_center">
         Welcome to Attendance System. <br />
         <ul>
-          <li>You should be an employee of Eye Space to use the system</li>
+          <li>Eye Space employees only! </li>
           <li>Your employee ID is userid</li>
           <li>Password hint - contact HO</li>
-          <li>Once logged In, you can register your device for attendance.</li>
+          <li>You can register your device for attendance.</li>
           <li>Only 1 device for an employee Can be registered</li>
           <li>For Re-registration/Update device, contact HO</li>
         </ul>
