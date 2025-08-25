@@ -93,6 +93,14 @@ export default function Dashboard() {
 
   return (
     <div className="gb-grid">
+    <section className="gb-card">
+       Dummy content here just to push the content visible.
+       <img
+                id="u_logo"
+                src="https://eyespace.co.in/gberp/images/sysimages/eyespace_logo_36x32.png"
+                alt="Eye Space Logo"
+              />
+    </section>
       <section className="gb-card">
         <h1 className="gb-title">Dashboard</h1>
         <button className="gb-btn danger" onClick={onLogout}>Logout</button>
