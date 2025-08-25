@@ -36,8 +36,7 @@ function LoginPage() {
 
   try {
     const data = await login(empId, password); // Already an object
-    console.log("Login response:", data);
-
+    
 	// Save to sessionStorage directly
 	sessionStorage.setItem("Stat", data.Stat);
 	sessionStorage.setItem("empl_id", data.empl_id);
@@ -104,7 +103,7 @@ function LoginPage() {
         <table className="gb_table_1 gb_tb_border_all gb_center">
           <tbody>
             <tr className="gb_tb_border_all">
-              <th className="gb_tb_border_all">Employee login</th>
+              <th className="gb_tb_border_all gb-black">Employee login</th>
             </tr>
             <tr className="gb_box_1 gb_tb_border_all">
               <th className="gb_box_1 gb_tb_border_all">
@@ -148,31 +147,31 @@ function LoginPage() {
         <table className="gb_table_1 gb_tb_border_all gb_center">
           <thead>
             <tr>
-              <th colSpan="2" className="gb_tb_border_all">
+              <th colSpan="2">
                 Device Status
               </th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td className="gb_tb_border_all">Registration status</td>
-              <td className="gb_tb_border_all">{tokenStatus}</td>
+              <td className="gb_tb_border_all gb-black">Registration status</td>
+              <td className="gb_tb_border_all gb-black">{tokenStatus}</td>
             </tr>
             <tr>
-              <td className="gb_tb_border_all">Latitude</td>
-              <td className="gb_tb_border_all">
+              <td className="gb_tb_border_all gb-black">Latitude</td>
+              <td className="gb_tb_border_all gb-black">
                 {location?.lat || location?.error || "Loading..."}
               </td>
             </tr>
             <tr>
-              <td className="gb_tb_border_all">Longitude</td>
-              <td className="gb_tb_border_all">
+              <td className="gb_tb_border_all gb-black">Longitude</td>
+              <td className="gb_tb_border_all gb-black">
                 {location?.lon || location?.error || "Loading..."}
               </td>
             </tr>
             <tr>
-              <td className="gb_tb_border_all">Accuracy (m)</td>
-              <td className="gb_tb_border_all">
+              <td className="gb_tb_border_all gb-black">Accuracy (m)</td>
+              <td className="gb_tb_border_all gb-black">
                 {location?.accuracy || location?.error || "Loading..."}
               </td>
             </tr>

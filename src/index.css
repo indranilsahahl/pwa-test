@@ -118,4 +118,6 @@ button:focus-visible {
   font-weight: 700;
   margin: 10px;
 }
-
+.gb-black {
+  color: black;		
+}

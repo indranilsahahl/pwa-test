@@ -134,7 +134,7 @@ export default function Dashboard() {
           <table className="gb-table">
             <tbody>
               <tr>
-                <th>Current Lat</th>
+                <th classname="gb-black">Current Lat</th>
                 <td><span className="gb-kv">{geo.lat != null ? geo.lat.toFixed(6) : "—"}</span></td>
               </tr>
               <tr>
@@ -143,24 +143,25 @@ export default function Dashboard() {
               </tr>
               <tr>
                 <th>Accuracy (m)</th>
-                <td><span className="gb-kv">{geo.accuracy != null ? Math.round(geo.accuracy) : "—"}</span></td>
+                <td classname="gb-black">{geo.accuracy != null ? Math.round(geo.accuracy) : "—"}
+                </td>
               </tr>
               <tr>
-                <th>Branch Lat</th>
-                <td><span className="gb-kv">{sessionStorage.getItem("br_lat") ?? "—"}</span></td>
+                <th classname="gb-black">Branch Lat</th>
+                <td classname="gb-black"> {sessionStorage.getItem("br_lat") ?? "—"} </td>
               </tr>
               <tr>
-                <th>Branch Long</th>
-                <td><span className="gb-kv">{sessionStorage.getItem("br_long") ?? "—"}</span></td>
+                <th classname="gb-black">Branch Long</th>
+                <td classname="gb-black">{sessionStorage.getItem("br_long") ?? "—"}</td>
               </tr>
               <tr>
-                <th>Distance to Branch (m)</th>
-                <td><span className="gb-kv">{distance != null ? distance : "—"}</span></td>
+                <th classname="gb-black">Distance to Branch (m)</th>
+                <td classname="gb-black">{distance != null ? distance : "—"}</td>
               </tr>
               {geo.error && (
                 <tr>
-                  <th>Location Error</th>
-                  <td><span className="gb-kv">{geo.error}</span></td>
+                  <th classname="gb-black">Location Error</th>
+                  <td classname="gb-black">{geo.error}</td>
                 </tr>
               )}
             </tbody>
