@@ -94,7 +94,7 @@ export default function Dashboard() {
   return (
     <div className="dashboard-container">
       <section classname="gb-card">
-      <table className="logo_txt">
+      <table className="logo_txt gb-table">
         <tbody>
           <tr>
             <td>
