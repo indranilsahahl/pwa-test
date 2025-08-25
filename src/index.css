@@ -75,7 +75,7 @@ button:focus-visible {
   border-radius: 10px;               /* rounded corners */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  /* the “raised” shadow */
   align-items: center;
-  width: 100%;
+  width: 90%;
   justify-content: flex-start;  /* ✅ correct */
 }
 
