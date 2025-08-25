@@ -3,7 +3,7 @@
 :root {
   --gb-bg: #0f172a;
   --gb-card: #111827;
-  --gb-text: #e5e7eb;
+  --gb-text: #ffffff;
   --gb-muted: #9ca3af;
   --gb-accent: #2563eb;
   --gb-border: #1f2937;
@@ -121,6 +121,10 @@
 }
 
 .dashboard-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;	
   background: transparent !important;
   padding: 1rem;
   border-radius: 12px;
