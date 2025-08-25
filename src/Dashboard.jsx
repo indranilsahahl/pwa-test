@@ -44,7 +44,9 @@ export default function Dashboard() {
 
   const claimStatus = sessionData.find(([lbl]) => lbl === "Claim Status")?.[1];
   const empId = sessionData.find(([lbl]) => lbl === "Employee ID")?.[1];
-
+  const validForAttendance =
+    localStorage.getItem("token") === sessionStorage.getItem("token") ? 1 : 0;
+    	
   const handleRegister = async () => {
     if (!empId) { setClaimResult("Employee ID not found."); return; }
     setClaiming(true); setClaimResult("");
@@ -147,6 +149,16 @@ export default function Dashboard() {
           </>
         ) : (
           <div className="gb-footer">User is already registered</div>
+        )}
+      </section>
+      <section className="gb-card">
+        <h2>Attendance Entry</h2>
+        {validForAttendance === 1 ? (
+          <>
+		This device can be used.
+          </>
+        ) : (
+          <div className="gb-footer">Device Token Does not match. </div>
         )}
       </section>
     </div>
