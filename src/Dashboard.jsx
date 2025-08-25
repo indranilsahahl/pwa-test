@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { claimDevice } from "./api.js"; // Make sure this path is correct
 import "./custom.css";
 
 // Haversine distance in meters
@@ -20,6 +21,10 @@ function haversineMeters(lat1, lon1, lat2, lon2) {
 
 export default function Dashboard() {
   const navigate = useNavigate();
+   // Add state for claim flow
+  const [claiming, setClaiming] = useState(false);
+  const [claimResult, setClaimResult] = useState("");
+  
   const [geo, setGeo] = useState({ lat: null, long: null, accuracy: null, error: null });
   const [distance, setDistance] = useState(null);
 
@@ -90,7 +95,56 @@ export default function Dashboard() {
     } catch {}
     navigate("/");
   };
+  
+  const claimStatus = sessionData.find(([label]) => label === "Claim Status")?.[1];
+  const empId = sessionData.find(([label]) => label === "Employee ID")?.[1];
 
+  const handleRegister = async () => {
+    if (!empId) {
+      setClaimResult("Employee ID not found.");
+      return;
+    }
+    setClaiming(true);
+    setClaimResult("");
+    try {
+      const res = await claimDevice(empId);
+      if (res?.success) {
+        setClaimResult("Device registered successfully!");
+        sessionStorage.setItem("Claim_stat", "Y"); // update for subsequent render
+      } else {
+        setClaimResult(res?.message || "Registration failed.");
+      }
+    } catch (err) {
+      setClaimResult("Error: " + err.message);
+    } finally {
+      setClaiming(false);
+    }
+  };
+
+  return (
+    <div className="gb-container dashboard-container">
+      {/* Existing header, grid, tables... */}
+
+      <section className="gb-card">
+        <h2>Device Claim Status</h2>
+        {claimStatus === "N" ? (
+          <>
+            <button
+              className="gb-btn"
+              onClick={handleRegister}
+              disabled={claiming}
+            >
+              {claiming ? "Registering..." : "Register This Device"}
+            </button>
+            {claimResult && <div className="gb-footer">{claimResult}</div>}
+          </>
+        ) : (
+          <div className="gb-footer">User is already registered</div>
+        )}
+      </section>
+    </div>
+  );
+}
   return (
     <div className="dashboard-container">
       <section classname="gb-card">
