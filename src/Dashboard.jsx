@@ -82,7 +82,7 @@ export default function Dashboard() {
     } finally {
       setClaiming(false);
     }
-    useReducer(x => x + 1, 0);
+    window.location.reload();
   };
 
   return (
