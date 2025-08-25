@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background:linear-gradient(to top, rgba(69, 192, 174, 1), rgba(69, 192, 174, .2));
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -29,7 +29,6 @@ body {
   color: black;
   min-width: 320px;
   min-height: 100vh;
-  background:linear-gradient(to top, rgba(69, 192, 174, 1), rgba(69, 192, 174, .2));
 }
 
 h1 {
@@ -116,7 +115,6 @@ button:focus-visible {
 .gb-title {
   font-size: 22px;
   font-weight: 700;
-  color:crimson;
-  margin: 0;
+  margin: 10px;
 }
 

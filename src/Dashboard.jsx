@@ -104,7 +104,7 @@ export default function Dashboard() {
                 alt="Eye Space Logo"
               />
             </td>
-            <td> <h1 className="gb-title">Dashboard</h1>
+            <td> <h1 className="gb-title gb_crimson">Dashboard</h1>
         <button className="gb-btn danger" onClick={onLogout}>Logout</button> </td>
           </tr>
         </tbody>
