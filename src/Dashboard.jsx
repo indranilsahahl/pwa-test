@@ -119,7 +119,7 @@ export default function Dashboard() {
               <tbody>
                 {sessionData.map(([label, value]) => (
                   <tr key={label}>
-                    <th>{label}:<span className="gb-kv">{String(value)}</span></th>
+                    <th>{label}:{String(value)}</th>
                   </tr>
                 ))}
               </tbody>
@@ -134,16 +134,16 @@ export default function Dashboard() {
             <tbody>
               <tr>
                 <th classname="gb-black">Current Lat:
-                <span className="gb-kv">{geo.lat != null ? geo.lat.toFixed(6) : "—"}</span></th>
+                {geo.lat != null ? geo.lat.toFixed(6) : "—"}</th>
               </tr>
               <tr>
-                <th>Current Long:
-                <span className="gb-kv">{geo.long != null ? geo.long.toFixed(6) : "—"}</span></th>
+                <th classname="gb-black">Current Long:
+                {geo.long != null ? geo.long.toFixed(6) : "—"}</th>
               </tr>
               <tr>
-                <th>Accuracy (m):
-                <span classname="gb-black">{geo.accuracy != null ? Math.round(geo.accuracy) : "—"}
-                </span></th>
+                <th classname="gb-black">Accuracy (m):
+                {geo.accuracy != null ? Math.round(geo.accuracy) : "—"}
+                </th>
               </tr>
               <tr>
                 <th classname="gb-black">Branch Lat:
