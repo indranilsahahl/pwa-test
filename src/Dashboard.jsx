@@ -109,13 +109,11 @@ export default function Dashboard() {
                 EYE SPACE <br />
               </span>
             </td>
+            <td> <h1 className="gb-title">Dashboard</h1>
+        <button className="gb-btn danger" onClick={onLogout}>Logout</button> </td>
           </tr>
         </tbody>
       </table>
-      </section>
-      <section className="gb-card">
-        <h1 className="gb-title">Dashboard</h1>
-        <button className="gb-btn danger" onClick={onLogout}>Logout</button>
       </section>
       <section className="gb-card">
           <h2>Login Session Data</h2>
