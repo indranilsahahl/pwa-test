@@ -92,8 +92,7 @@ export default function Dashboard() {
   };
 
   return (
-    <>	
-    <div className="gb-container dashboard-container">
+    <div className="gb-container dashboard-container gb-grid">
       <div className="gb-header">
         <h1 className="gb-title">Dashboard</h1>
         <button className="gb-btn danger" onClick={onLogout}>Logout</button>
@@ -159,6 +158,5 @@ export default function Dashboard() {
         </section>
       </div>
     </div>
-    </>
   );
 }
