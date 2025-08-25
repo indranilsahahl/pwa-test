@@ -69,6 +69,8 @@
   border-radius: 16px;
   padding: 16px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  flex: none;              /* Prevent growth/shrinkage */
+  width: 100% !important;  /* Force full-width for each item */
 }
 
 .gb-card h2 {
@@ -124,6 +126,8 @@
   border-radius: 12px;
   display:flex;
   flex-direction:column;
+  flex: none;              /* Prevent growth/shrinkage */
+  width: 100% !important;  /* Force full-width for each item */
 }
 
 /* Ensure section titles are visible on a gradient */
