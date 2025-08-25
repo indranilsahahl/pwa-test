@@ -92,7 +92,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-container gb-container">
     <section className="gb-card">
        Dummy content here just to push the content visible.
        <img
