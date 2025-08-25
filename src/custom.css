@@ -2,7 +2,7 @@
 /* Custom minimal CSS for Dashboard (no external utility classes) */
 :root {
   --gb-bg: #0f172a;
-  --gb-card: #111827;
+  --gb-card: #668888;
   --gb-text: #ffffff;
   --gb-muted: #9ca3af;
   --gb-accent: #2563eb;
@@ -18,7 +18,6 @@
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
   display: flex;
   flex-direction: column;
-  gap: 1 rem;
   padding-top: 1.5rem;
   gap: 1rem;
 }
@@ -34,9 +33,9 @@
 .gb-btn {
   appearance: none;
   border: 1px solid var(--gb-border);
-  background: transparent;
+  background: #9B883E;
   color: var(--gb-text);
-  padding: 10px 14px;
+  padding: 5px 5px;
   border-radius: 12px;
   cursor: pointer;
   transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;

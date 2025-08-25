@@ -119,8 +119,7 @@ export default function Dashboard() {
               <tbody>
                 {sessionData.map(([label, value]) => (
                   <tr key={label}>
-                    <th>{label}</th>
-                    <td><span className="gb-kv">{String(value)}</span></td>
+                    <th>{label}:<span className="gb-kv">{String(value)}</span></th>
                   </tr>
                 ))}
               </tbody>
@@ -134,34 +133,34 @@ export default function Dashboard() {
           <table className="gb-table">
             <tbody>
               <tr>
-                <th classname="gb-black">Current Lat</th>
-                <td><span className="gb-kv">{geo.lat != null ? geo.lat.toFixed(6) : "—"}</span></td>
+                <th classname="gb-black">Current Lat:
+                <span className="gb-kv">{geo.lat != null ? geo.lat.toFixed(6) : "—"}</span></th>
               </tr>
               <tr>
-                <th>Current Long</th>
-                <td><span className="gb-kv">{geo.long != null ? geo.long.toFixed(6) : "—"}</span></td>
+                <th>Current Long:
+                <span className="gb-kv">{geo.long != null ? geo.long.toFixed(6) : "—"}</span></th>
               </tr>
               <tr>
-                <th>Accuracy (m)</th>
-                <td classname="gb-black">{geo.accuracy != null ? Math.round(geo.accuracy) : "—"}
-                </td>
+                <th>Accuracy (m):
+                <span classname="gb-black">{geo.accuracy != null ? Math.round(geo.accuracy) : "—"}
+                </span></th>
               </tr>
               <tr>
-                <th classname="gb-black">Branch Lat</th>
-                <td classname="gb-black"> {sessionStorage.getItem("br_lat") ?? "—"} </td>
+                <th classname="gb-black">Branch Lat:
+                 {sessionStorage.getItem("br_lat") ?? "—"} </th>
               </tr>
               <tr>
-                <th classname="gb-black">Branch Long</th>
-                <td classname="gb-black">{sessionStorage.getItem("br_long") ?? "—"}</td>
+                <th classname="gb-black">Branch Long:
+                {sessionStorage.getItem("br_long") ?? "—"}</th>
               </tr>
               <tr>
-                <th classname="gb-black">Distance to Branch (m)</th>
-                <td classname="gb-black">{distance != null ? distance : "—"}</td>
+                <th classname="gb-black">Distance to Branch (m): 
+                {distance != null ? distance : "—"}</th>
               </tr>
               {geo.error && (
                 <tr>
-                  <th classname="gb-black">Location Error</th>
-                  <td classname="gb-black">{geo.error}</td>
+                  <th classname="gb-black">Location Error:
+                 {geo.error}</th>
                 </tr>
               )}
             </tbody>
