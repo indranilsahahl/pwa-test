@@ -47,7 +47,7 @@ function LoginPage() {
 	sessionStorage.setItem("Emp_name", data.Name);
 	sessionStorage.setItem("home_branch", data.home_branch);
 
-	setTokenStatus(data.token || "No Token");
+	setTokenStatus(loaclStorage.getItem("token") || "No Token");
 
 	if (data.Stat === "OK") {
   		navigate("/dashboard");
