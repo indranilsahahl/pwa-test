@@ -99,7 +99,7 @@ select:invalid{box-shadow:none}
 
 
 /*------ Colors ----*/
-.gb_crimson, .gb_hover_crimson:hover{color:#fff; background-color:#a20025;}
+.gb_crimson, .gb_hover_crimson:hover{color:crimson;}
 .gb_olive, .gb_hover_olive:hover{color:#000; background-color:#bFcFaF;}
 .gb_taupe, .gb_hover_taupe:hover{color:#000; background-color:#d7c79f;}
 .gb_sienna, .gb_hover_sienna:hover{color:#000; background-color:#F0A780;}
@@ -141,4 +141,5 @@ select:invalid{box-shadow:none}
 .gb_btn_royalblue{color:#000; background-color:rgba(65, 105, 225, .3);} .gb_btn_royalblue:hover{color:#fff; background-color:#4169e1;}
 .gb_btn_goldenrod{color:#000; background-color:rgba(218, 165, 32, .3);} .gb_btn_goldenrod:hover{color:#fff; background-color:#daa520;}
 .gb_btn_crimson:disabled,.gb_btn_mediumseagreen:disabled,.gb_btn_menu_blue:disabled,.gb_btn_red:disabled,.gb_btn_olivedarb:disabled,
-.gb_btn_royalblue:disabled,.gb_btn_goldenrod:disabled{color:#999;background:inherit;}
+.gb_btn_royalblue:disabled,.gb_btn_goldenrod:disabled{color:#999;background:inherit;}
+
