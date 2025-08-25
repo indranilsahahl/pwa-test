@@ -46,7 +46,10 @@ export default function Dashboard() {
   const empId = sessionData.find(([lbl]) => lbl === "Employee ID")?.[1];
   const validForAttendance =
     localStorage.getItem("token") === sessionStorage.getItem("token") ? 1 : 0;
-    	
+  const now = new Date();
+	now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+	const today = now.toISOString().slice(0, 10);
+  	
   const handleRegister = async () => {
     if (!empId) { setClaimResult("Employee ID not found."); return; }
     setClaiming(true); setClaimResult("");
@@ -155,7 +158,7 @@ export default function Dashboard() {
         <h2>Attendance Entry</h2>
         {validForAttendance === 1 ? (
           <>
-		This device can be used.
+		This device can be used. {today}
           </>
         ) : (
           <div className="gb-footer">Device Token Does not match. </div>
