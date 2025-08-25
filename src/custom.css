@@ -60,7 +60,7 @@
 }
 
 @media (min-width: 880px) {
-  .gb-grid { grid-template-columns: 1fr 1fr; }
+  .gb-grid { grid-template-columns: 1fr; }
 }
 
 .gb-card {
@@ -84,7 +84,7 @@
   border-spacing: 0;
   border: 1px solid var(--gb-border);
   border-radius: 12px;
-  overflow: hidden;
+  overflow: auto;
 }
 .gb-table tr:nth-child(odd) { background: rgba(255,255,255,0.02); }
 .gb-table th, .gb-table td {
