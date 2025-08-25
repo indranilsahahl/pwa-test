@@ -50,7 +50,11 @@ export default function Dashboard() {
     setClaiming(true); setClaimResult("");
     try {
       const res = await claimDevice(empId);
-      if (res) {
+      console.log(res);
+      console.log(typeof(res));
+      console.log(res.keys);
+      
+      if (res.success) {
         setClaimResult("Device registered successfully!");
         sessionStorage.setItem("Claim_stat", "Y");
         localStorage.setItem("token", sessionStorage.getItem("token"))
