@@ -12,9 +12,7 @@ function LoginPage() {
   const [location, setLocation] = useState(null);
 
   const navigate = useNavigate();
-  // Get the tokenStatus from localStorage
-  setTokenStatus(localStorage.getItem("token") || "No Token");
-  
+    
   // ✅ Get location on mount
   useEffect(() => {
     if (navigator.geolocation) {
@@ -30,6 +28,9 @@ function LoginPage() {
     } else {
       setLocation({ error: "Geolocation not supported" });
     }
+    // Get the tokenStatus from localStorage
+    setTokenStatus(localStorage.getItem("token") || "No Token");
+
   }, []);
 
   const handleSubmit = async (e) => {
