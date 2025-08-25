@@ -122,6 +122,8 @@
   background: transparent !important;
   padding: 1rem;
   border-radius: 12px;
+  display:flex;
+  flex-direction:column;
 }
 
 /* Ensure section titles are visible on a gradient */
