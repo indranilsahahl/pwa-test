@@ -9,6 +9,7 @@
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+  margin:10px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

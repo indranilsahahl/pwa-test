@@ -87,9 +87,8 @@ function LoginPage() {
       </table>
 
       {/* Welcome text */}
-      <div className="gb_font_1 gb_center">
-        Welcome to Eye Space Attendance System. <br />
-        Please use the following form to login. <br />
+      <div className="gb_font_1 gb_center gb_txt_blue_1">
+        Welcome to Attendance System. <br />
         <ul>
           <li>You should be an employee of Eye Space to use the system</li>
           <li>Your employee ID is userid</li>
@@ -156,7 +155,7 @@ function LoginPage() {
           </thead>
           <tbody>
             <tr>
-              <td className="gb_tb_border_all">Token</td>
+              <td className="gb_tb_border_all">Registration status</td>
               <td className="gb_tb_border_all">{tokenStatus}</td>
             </tr>
             <tr>
