@@ -93,14 +93,26 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-container">
-    <section className="gb-card">
-       Dummy content here just to push the content visible.
-       <img
+      <section classname="gb-card">
+      <table className="logo_txt">
+        <tbody>
+          <tr>
+            <td>
+              <img
                 id="u_logo"
                 src="https://eyespace.co.in/gberp/images/sysimages/eyespace_logo_36x32.png"
                 alt="Eye Space Logo"
               />
-    </section>
+            </td>
+            <td>
+              <span className="gb_font_2">
+                EYE SPACE <br />
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </section>
       <section className="gb-card">
         <h1 className="gb-title">Dashboard</h1>
         <button className="gb-btn danger" onClick={onLogout}>Logout</button>
@@ -121,7 +133,7 @@ export default function Dashboard() {
               </tbody>
             </table>
           )}
-          <div className="gb-footer">These values are read live from <span className="gb-badge">sessionStorage</span>.</div>
+          <div className="gb-footer">These values are read live from <span className="gb-badge">Last Login session</span>.</div>
         </section>
 
         <section className="gb-card">
@@ -129,11 +141,11 @@ export default function Dashboard() {
           <table className="gb-table">
             <tbody>
               <tr>
-                <th>Current Latitude</th>
+                <th>Current Lat</th>
                 <td><span className="gb-kv">{geo.lat != null ? geo.lat.toFixed(6) : "—"}</span></td>
               </tr>
               <tr>
-                <th>Current Longitude</th>
+                <th>Current Long</th>
                 <td><span className="gb-kv">{geo.long != null ? geo.long.toFixed(6) : "—"}</span></td>
               </tr>
               <tr>
@@ -141,11 +153,11 @@ export default function Dashboard() {
                 <td><span className="gb-kv">{geo.accuracy != null ? Math.round(geo.accuracy) : "—"}</span></td>
               </tr>
               <tr>
-                <th>Branch Latitude</th>
+                <th>Branch Lat</th>
                 <td><span className="gb-kv">{sessionStorage.getItem("br_lat") ?? "—"}</span></td>
               </tr>
               <tr>
-                <th>Branch Longitude</th>
+                <th>Branch Long</th>
                 <td><span className="gb-kv">{sessionStorage.getItem("br_long") ?? "—"}</span></td>
               </tr>
               <tr>
