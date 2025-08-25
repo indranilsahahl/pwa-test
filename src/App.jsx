@@ -12,7 +12,9 @@ function LoginPage() {
   const [location, setLocation] = useState(null);
 
   const navigate = useNavigate();
-
+  // Get the tokenStatus from localStorage
+  setTokenStatus(localStorage.getItem("token") || "No Token");
+  
   // ✅ Get location on mount
   useEffect(() => {
     if (navigator.geolocation) {
@@ -46,8 +48,6 @@ function LoginPage() {
 	sessionStorage.setItem("Claim_stat", data.Claim_Stat);
 	sessionStorage.setItem("Emp_name", data.Name);
 	sessionStorage.setItem("home_branch", data.home_branch);
-
-	setTokenStatus(loaclStorage.getItem("token") || "No Token");
 
 	if (data.Stat === "OK") {
   		navigate("/dashboard");
