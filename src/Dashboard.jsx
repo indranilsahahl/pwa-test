@@ -92,7 +92,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="gb-grid dashboard-container">
+    <div className="dashboard-container">
     <section className="gb-card">
        Dummy content here just to push the content visible.
        <img

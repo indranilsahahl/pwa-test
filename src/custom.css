@@ -60,7 +60,7 @@
 }
 
 @media (min-width: 880px) {
-  .gb-grid { grid-template-columns: 1fr; }
+  .gb-grid { grid-template-columns: 1fr 1fr; }
 }
 
 .gb-card {
