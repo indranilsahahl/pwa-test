@@ -1,5 +1,13 @@
 const API_BASE = "https://eyespace.co.in/gberp/hr/attendance.php";
 
+
+export async function safeJson(response) {
+  const txt = await response.text();
+  try { return JSON.parse(txt); } catch (e) { 
+    throw new Error("Invalid JSON from server: " + txt.slice(0, 200));
+  }
+}
+
 export async function login(empId, password) {
   const formData = new FormData();
   formData.append("action", "login");
@@ -15,8 +23,7 @@ export async function login(empId, password) {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }
 
-  const json = await response.json();
-  console.log("Login Parsed JSON:", json);
+  const json = await safeJson(response);
   return json;
 }
 
@@ -34,7 +41,6 @@ export async function claimDevice(empId) {
     throw new Error("Network response was not ok");
   }
 
-  const json = await response.json();
-  console.log("Claim Parsed JSON:", json);
+  const json = await safeJson(response);
   return json; // expected { Stat: "OK", token: "xxxxx" }
 }

@@ -1,107 +1,161 @@
-import { useEffect, useState } from "react";
-import { fetchUserById } from "./api.js";
+import React, { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./custom.css";
+
+// Haversine distance in meters
+function haversineMeters(lat1, lon1, lat2, lon2) {
+  function toRad(d) { return (d * Math.PI) / 180; }
+  const R = 6371000; // meters
+  const φ1 = toRad(Number(lat1));
+  const φ2 = toRad(Number(lat2));
+  const Δφ = toRad(Number(lat2) - Number(lat1));
+  const Δλ = toRad(Number(lon2) - Number(lon1));
+  const a =
+    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+    Math.cos(φ1) * Math.cos(φ2) *
+    Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return Math.round(R * c);
+}
 
 export default function Dashboard() {
-  const [user, setUser] = useState(null);
-  const [location, setLocation] = useState({ lat: null, long: null });
+  const navigate = useNavigate();
+  const [geo, setGeo] = useState({ lat: null, long: null, accuracy: null, error: null });
   const [distance, setDistance] = useState(null);
 
-  // Fetch user data from empId in localStorage
-  useEffect(() => {
-    const empId = localStorage.getItem("empId");
-    if (empId) {
-      fetchUserById(empId).then(setUser).catch(console.error);
-    }
+  // Read session values captured on successful login
+  const sessionData = useMemo(() => {
+    const keys = [
+      "Stat",
+      "token",
+      "Claim_stat",
+      "Emp_name",
+      "empl_id",
+      "home_branch",
+      "br_lat",
+      "br_long"
+    ];
+    const labels = {
+      Stat: "Status",
+      token: "Auth Token",
+      Claim_stat: "Claim Status",
+      Emp_name: "Employee Name",
+      empl_id: "Employee ID",
+      home_branch: "Home Branch",
+      br_lat: "Branch Latitude",
+      br_long: "Branch Longitude",
+    };
+    const rows = [];
+    keys.forEach((k) => {
+      const v = sessionStorage.getItem(k);
+      if (v !== null && v !== undefined) {
+        rows.push([labels[k] || k, v]);
+      }
+    });
+    return rows;
   }, []);
 
-  // Get user geolocation
+  // Geolocation for current location + compute distance from branch lat/long
   useEffect(() => {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          setLocation({
-            lat: pos.coords.latitude,
-            long: pos.coords.longitude,
-          });
-        },
-        (err) => console.error(err),
-        { enableHighAccuracy: true }
-      );
+    let cancelled = false;
+    if (!("geolocation" in navigator)) {
+      setGeo((g) => ({ ...g, error: "Geolocation not supported" }));
+      return;
     }
+    const opts = { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 };
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        if (cancelled) return;
+        const { latitude, longitude, accuracy } = pos.coords;
+        const brLat = Number(sessionStorage.getItem("br_lat"));
+        const brLong = Number(sessionStorage.getItem("br_long"));
+        const d = (Number.isFinite(brLat) && Number.isFinite(brLong))
+          ? haversineMeters(latitude, longitude, brLat, brLong)
+          : null;
+        setGeo({ lat: latitude, long: longitude, accuracy: accuracy ?? null, error: null });
+        setDistance(d);
+      },
+      (err) => {
+        if (cancelled) return;
+        setGeo((g) => ({ ...g, error: err.message || "Unable to fetch location" }));
+      },
+      opts
+    );
+    return () => { cancelled = true; };
   }, []);
 
-  // Calculate distance when user data and location are available
-  useEffect(() => {
-    if (!user || !location.lat || !location.long) return;
-
-    const R = 6371000; // meters
-    const toRad = (deg) => (deg * Math.PI) / 180;
-
-    const φ1 = toRad(location.lat);
-    const φ2 = toRad(user.loc_lat);
-    const Δφ = toRad(user.loc_lat - location.lat);
-    const Δλ = toRad(user.loc_long - location.long);
-
-    const a =
-      Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-      Math.cos(φ1) * Math.cos(φ2) *
-      Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    setDistance(Math.round(R * c));
-  }, [user, location]);
-
-  if (!user) return <p className="p-4">Loading user data...</p>;
+  const onLogout = () => {
+    try {
+      sessionStorage.clear();
+    } catch {}
+    navigate("/");
+  };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
+    <div className="gb-container">
+      <div className="gb-header">
+        <h1 className="gb-title">Dashboard</h1>
+        <button className="gb-btn danger" onClick={onLogout}>Logout</button>
+      </div>
 
-      {/* Show current location */}
-      {location.lat && location.long ? (
-        <p className="mb-2">
-          Current Location: {location.lat.toFixed(6)}, {location.long.toFixed(6)}
-        </p>
-      ) : (
-        <p className="mb-2 text-gray-500">Fetching location...</p>
-      )}
+      <div className="gb-grid">
+        <section className="gb-card">
+          <h2>Login Session Data</h2>
+          {sessionData.length === 0 ? (
+            <div className="gb-footer">No session data found. Please login again.</div>
+          ) : (
+            <table className="gb-table">
+              <tbody>
+                {sessionData.map(([label, value]) => (
+                  <tr key={label}>
+                    <th>{label}</th>
+                    <td><span className="gb-kv">{String(value)}</span></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+          <div className="gb-footer">These values are read live from <span className="gb-badge">sessionStorage</span>.</div>
+        </section>
 
-      {/* User data table */}
-      <div className="overflow-x-auto">
-        <table className="border-collapse border border-gray-400 w-full text-sm">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="border border-gray-400 px-2 py-1">Emp ID</th>
-              <th className="border border-gray-400 px-2 py-1">Name</th>
-              <th className="border border-gray-400 px-2 py-1">Branch</th>
-              <th className="border border-gray-400 px-2 py-1">Device ID</th>
-              <th className="border border-gray-400 px-2 py-1">DB Latitude</th>
-              <th className="border border-gray-400 px-2 py-1">DB Longitude</th>
-              <th className="border border-gray-400 px-2 py-1">Distance (m)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              className={
-                distance !== null
-                  ? distance < 100
-                    ? "bg-green-100"
-                    : "bg-red-100"
-                  : ""
-              }
-            >
-              <td className="border border-gray-400 px-2 py-1">{user.emp_id}</td>
-              <td className="border border-gray-400 px-2 py-1">{user.emp_name}</td>
-              <td className="border border-gray-400 px-2 py-1">{user.branch_name}</td>
-              <td className="border border-gray-400 px-2 py-1">{user.device_id}</td>
-              <td className="border border-gray-400 px-2 py-1">{user.loc_lat}</td>
-              <td className="border border-gray-400 px-2 py-1">{user.loc_long}</td>
-              <td className="border border-gray-400 px-2 py-1">
-                {distance !== null ? `${distance} m` : "N/A"}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <section className="gb-card">
+          <h2>Location & Branch Distance</h2>
+          <table className="gb-table">
+            <tbody>
+              <tr>
+                <th>Current Latitude</th>
+                <td><span className="gb-kv">{geo.lat != null ? geo.lat.toFixed(6) : "—"}</span></td>
+              </tr>
+              <tr>
+                <th>Current Longitude</th>
+                <td><span className="gb-kv">{geo.long != null ? geo.long.toFixed(6) : "—"}</span></td>
+              </tr>
+              <tr>
+                <th>Accuracy (m)</th>
+                <td><span className="gb-kv">{geo.accuracy != null ? Math.round(geo.accuracy) : "—"}</span></td>
+              </tr>
+              <tr>
+                <th>Branch Latitude</th>
+                <td><span className="gb-kv">{sessionStorage.getItem("br_lat") ?? "—"}</span></td>
+              </tr>
+              <tr>
+                <th>Branch Longitude</th>
+                <td><span className="gb-kv">{sessionStorage.getItem("br_long") ?? "—"}</span></td>
+              </tr>
+              <tr>
+                <th>Distance to Branch (m)</th>
+                <td><span className="gb-kv">{distance != null ? distance : "—"}</span></td>
+              </tr>
+              {geo.error && (
+                <tr>
+                  <th>Location Error</th>
+                  <td><span className="gb-kv">{geo.error}</span></td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+          <div className="gb-footer">Distance uses the Haversine formula.</div>
+        </section>
       </div>
     </div>
   );
