@@ -73,8 +73,7 @@ export default function Dashboard() {
       if (pdata.success) {
         setClaimResult("Device registered successfully!");
         sessionStorage.setItem("Claim_stat", "Y");
-        localStorage.setItem("token", sessionStorage.getItem("token"))
-        useReducer(x => x + 1, 0);
+        localStorage.setItem("token", sessionStorage.getItem("token"));
       } else {
         setClaimResult(res?.message || "Registration failed.");
       }
@@ -83,6 +82,7 @@ export default function Dashboard() {
     } finally {
       setClaiming(false);
     }
+    useReducer(x => x + 1, 0);
   };
 
   return (
