@@ -1,116 +1,58 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { claimDevice } from "./api.js"; // Make sure this path is correct
+import { claimDevice } from "./api.js";
 import "./custom.css";
-
-// Haversine distance in meters
-function haversineMeters(lat1, lon1, lat2, lon2) {
-  function toRad(d) { return (d * Math.PI) / 180; }
-  const R = 6371000; // meters
-  const φ1 = toRad(Number(lat1));
-  const φ2 = toRad(Number(lat2));
-  const Δφ = toRad(Number(lat2) - Number(lat1));
-  const Δλ = toRad(Number(lon2) - Number(lon1));
-  const a =
-    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-    Math.cos(φ1) * Math.cos(φ2) *
-    Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return Math.round(R * c);
-}
 
 export default function Dashboard() {
   const navigate = useNavigate();
-   // Add state for claim flow
   const [claiming, setClaiming] = useState(false);
   const [claimResult, setClaimResult] = useState("");
-  
   const [geo, setGeo] = useState({ lat: null, long: null, accuracy: null, error: null });
   const [distance, setDistance] = useState(null);
 
-  // Read session values captured on successful login
   const sessionData = useMemo(() => {
-    const keys = [
-      "Stat",
-      "token",
-      "Claim_stat",
-      "Emp_name",
-      "empl_id",
-      "home_branch",
-      "br_lat",
-      "br_long"
-    ];
-    const labels = {
-      Stat: "Status",
-      token: "Auth Token",
-      Claim_stat: "Claim Status",
-      Emp_name: "Employee Name",
-      empl_id: "Employee ID",
-      home_branch: "Home Branch",
-      br_lat: "Branch Latitude",
-      br_long: "Branch Longitude",
-    };
-    const rows = [];
-    keys.forEach((k) => {
-      const v = sessionStorage.getItem(k);
-      if (v !== null && v !== undefined) {
-        rows.push([labels[k] || k, v]);
-      }
-    });
-    return rows;
+    const keys = ["Stat", "token", "Claim_stat", "Emp_name", "empl_id", "home_branch", "br_lat", "br_long"];
+    const labels = { Stat: "Status", token: "Auth Token", Claim_stat: "Claim Status", Emp_name: "Employee Name", empl_id: "Employee ID", home_branch: "Home Branch", br_lat: "Branch Latitude", br_long: "Branch Longitude" };
+    return keys.reduce((arr, key) => {
+      const val = sessionStorage.getItem(key);
+      if (val != null) arr.push([labels[key] || key, val]);
+      return arr;
+    }, []);
   }, []);
 
-  // Geolocation for current location + compute distance from branch lat/long
   useEffect(() => {
-    let cancelled = false;
     if (!("geolocation" in navigator)) {
       setGeo((g) => ({ ...g, error: "Geolocation not supported" }));
       return;
     }
-    const opts = { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 };
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        if (cancelled) return;
-        const { latitude, longitude, accuracy } = pos.coords;
+      ({ coords }) => {
         const brLat = Number(sessionStorage.getItem("br_lat"));
         const brLong = Number(sessionStorage.getItem("br_long"));
-        const d = (Number.isFinite(brLat) && Number.isFinite(brLong))
-          ? haversineMeters(latitude, longitude, brLat, brLong)
+        const d = (isFinite(brLat) && isFinite(brLong))
+          ? haversineMeters(coords.latitude, coords.longitude, brLat, brLong)
           : null;
-        setGeo({ lat: latitude, long: longitude, accuracy: accuracy ?? null, error: null });
+        setGeo({ lat: coords.latitude, long: coords.longitude, accuracy: coords.accuracy, error: null });
         setDistance(d);
       },
-      (err) => {
-        if (cancelled) return;
-        setGeo((g) => ({ ...g, error: err.message || "Unable to fetch location" }));
-      },
-      opts
+      (err) => setGeo((g) => ({ ...g, error: err.message || "Unable to fetch location" })),
+      { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
     );
-    return () => { cancelled = true; };
   }, []);
 
-  const onLogout = () => {
-    try {
-      sessionStorage.clear();
-    } catch {}
-    navigate("/");
-  };
-  
-  const claimStatus = sessionData.find(([label]) => label === "Claim Status")?.[1];
-  const empId = sessionData.find(([label]) => label === "Employee ID")?.[1];
+  const onLogout = () => { sessionStorage.clear(); navigate("/"); };
+
+  const claimStatus = sessionData.find(([lbl]) => lbl === "Claim Status")?.[1];
+  const empId = sessionData.find(([lbl]) => lbl === "Employee ID")?.[1];
 
   const handleRegister = async () => {
-    if (!empId) {
-      setClaimResult("Employee ID not found.");
-      return;
-    }
-    setClaiming(true);
-    setClaimResult("");
+    if (!empId) { setClaimResult("Employee ID not found."); return; }
+    setClaiming(true); setClaimResult("");
     try {
       const res = await claimDevice(empId);
       if (res?.success) {
         setClaimResult("Device registered successfully!");
-        sessionStorage.setItem("Claim_stat", "Y"); // update for subsequent render
+        sessionStorage.setItem("Claim_stat", "Y");
       } else {
         setClaimResult(res?.message || "Registration failed.");
       }
@@ -122,19 +64,62 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="gb-container dashboard-container">
-      {/* Existing header, grid, tables... */}
+    <div className="dashboard-container">
+      <section className="gb-card">
+        <table className="logo_txt">
+          <tbody>
+            <tr>
+              <td><img id="u_logo" src="https://eyespace.co.in/gberp/images/sysimages/eyespace_logo_36x32.png" alt="Logo" /></td>
+              <td>
+                <h1 className="gb-title gb_crimson">Dashboard</h1>
+                <button className="gb-btn danger" onClick={onLogout}>Logout</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section className="gb-card">
+        <h2>Login Session Data</h2>
+        {sessionData.length === 0 ? (
+          <div className="gb-footer">No session data found. Please login again.</div>
+        ) : (
+          <table className="gb-table">
+            <tbody>
+              {sessionData.map(([label, value]) => (
+                <tr key={label}>
+                  <th>{label}</th>
+                  <td><span className="gb-kv">{value}</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+        <div className="gb-footer">These values are read live from <span className="gb-badge">sessionStorage</span>.</div>
+      </section>
+
+      <section className="gb-card">
+        <h2>Location & Branch Distance</h2>
+        <table className="gb-table">
+          <tbody>
+            <tr><th>Current Lat</th><td>{geo.lat?.toFixed(6) || "—"}</td></tr>
+            <tr><th>Current Lon</th><td>{geo.long?.toFixed(6) || "—"}</td></tr>
+            <tr><th>Accuracy (m)</th><td>{geo.accuracy != null ? Math.round(geo.accuracy) : "—"}</td></tr>
+            <tr><th>Branch Lat</th><td>{sessionStorage.getItem("br_lat") ?? "—"}</td></tr>
+            <tr><th>Branch Lon</th><td>{sessionStorage.getItem("br_long") ?? "—"}</td></tr>
+            <tr><th>Distance to Branch (m)</th><td>{distance ?? "—"}</td></tr>
+            {geo.error && <tr><th>Location Error</th><td>{geo.error}</td></tr>}
+          </tbody>
+        </table>
+        <div className="gb-footer">Distance uses the Haversine formula.</div>
+      </section>
 
       <section className="gb-card">
         <h2>Device Claim Status</h2>
         {claimStatus === "N" ? (
           <>
-            <button
-              className="gb-btn"
-              onClick={handleRegister}
-              disabled={claiming}
-            >
-              {claiming ? "Registering..." : "Register This Device"}
+            <button className="gb-btn" disabled={claiming} onClick={handleRegister}>
+              {claiming ? "Registering…" : "Register This Device"}
             </button>
             {claimResult && <div className="gb-footer">{claimResult}</div>}
           </>
@@ -145,82 +130,12 @@ export default function Dashboard() {
     </div>
   );
 }
-  return (
-    <div className="dashboard-container">
-      <section classname="gb-card">
-      <table className="logo_txt">
-        <tbody>
-          <tr>
-            <td>
-              <img
-                id="u_logo"
-                src="https://eyespace.co.in/gberp/images/sysimages/eyespace_logo_36x32.png"
-                alt="Eye Space Logo"
-              />
-            </td>
-            <td> <h1 className="gb-title gb_crimson">Dashboard</h1>
-        <button className="gb-btn danger" onClick={onLogout}>Logout</button> </td>
-          </tr>
-        </tbody>
-      </table>
-      </section>
-      <section className="gb-card">
-          <h2>Login Session Data</h2>
-          {sessionData.length === 0 ? (
-            <div className="gb-footer">No session data found. Please login again.</div>
-          ) : (
-            <table className="gb-table">
-              <tbody>
-                {sessionData.map(([label, value]) => (
-                  <tr key={label}>
-                    <th>{label}:{String(value)}</th>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-          <div className="gb-footer">These values are read live from <span className="gb-badge">Last Login session</span>.</div>
-        </section>
 
-        <section className="gb-card">
-          <h2>Location & Branch Distance</h2>
-          <table className="gb-table">
-            <tbody>
-              <tr>
-                <th classname="gb-black">Current Lat:
-                {geo.lat != null ? geo.lat.toFixed(6) : "—"}</th>
-              </tr>
-              <tr>
-                <th classname="gb-black">Current Long:
-                {geo.long != null ? geo.long.toFixed(6) : "—"}</th>
-              </tr>
-              <tr>
-                <th classname="gb-black">Accuracy (m):
-                {geo.accuracy != null ? Math.round(geo.accuracy) : "—"}
-                </th>
-              </tr>
-              <tr>
-                <th classname="gb-black">Branch Lat:
-                 {sessionStorage.getItem("br_lat") ?? "—"} </th>
-              </tr>
-              <tr>
-                <th classname="gb-black">Branch Long:
-                {sessionStorage.getItem("br_long") ?? "—"}</th>
-              </tr>
-              <tr>
-                <th classname="gb-black">Distance to Branch (m): 
-                {distance != null ? distance : "—"}</th>
-              </tr>
-              {geo.error && (
-                <tr>
-                  <th classname="gb-black">Location Error:
-                 {geo.error}</th>
-                </tr>
-              )}
-            </tbody>
-          </table>
-          <div className="gb-footer">Distance uses the Haversine formula.</div>
-        </section>
-     </div>
-  );
+// Haversine function (same as you provided)
+function haversineMeters(lat1, lon1, lat2, lon2) {
+  const R = 6371000, toRad = (d) => (d * Math.PI) / 180;
+  const φ1 = toRad(lat1), φ2 = toRad(lat2),
+        Δφ = toRad(lat2 - lat1), Δλ = toRad(lon2 - lon1);
+  const a = Math.sin(Δφ/2)**2 + Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ/2)**2;
+  return Math.round(R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
 }
