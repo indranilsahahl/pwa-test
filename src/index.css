@@ -4,7 +4,7 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  color: rgba(255, 255, 255, 1.0);
   background:linear-gradient(to top, rgba(69, 192, 174, 1), rgba(69, 192, 174, .2));
 
   font-synthesis: none;
@@ -27,7 +27,7 @@ body {
   margin: auto;
   display: flex;
   place-items: center;
-  color: black;
+  color: white;
   min-width: 320px;
   min-height: 100vh;
 }

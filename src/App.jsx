@@ -87,7 +87,7 @@ function LoginPage() {
       </table>
 
       {/* Welcome text */}
-      <div className="gb_font_1 gb_center gb_txt_blue_1">
+      <div className="gb_font_1 gb_center">
         Welcome to Attendance System. <br />
         <ul>
           <li>You should be an employee of Eye Space to use the system</li>
