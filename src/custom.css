@@ -31,13 +31,6 @@
   margin-top: 20px;
 }
 
-.gb-title {
-  font-size: 22px;
-  font-weight: 700;
-  color:crimson;
-  margin: 0;
-}
-
 .gb-btn {
   appearance: none;
   border: 1px solid var(--gb-border);
@@ -82,9 +75,11 @@
 }
 
 .gb-table {
-  width: 100%;
+  width: 90%;
   border-collapse: separate;
   border-spacing: 0;
+  background-color: #f0f0f0;
+  color: white;
   border: 1px solid var(--gb-border);
   border-radius: 12px;
   overflow: auto;
