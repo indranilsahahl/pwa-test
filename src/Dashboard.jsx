@@ -53,8 +53,24 @@ export default function Dashboard() {
       console.log(res);
       console.log(typeof(res));
       console.log(res.keys);
-      
-      if (res.success) {
+      let pdata;
+      if (typeof res === "string") {
+  	try {
+    		pdata = JSON.parse(res);
+  		} catch (err) {
+    			console.error("Failed to parse JSON:", err, res);
+    		// Optionally handle invalid JSON cases here
+    			pdata = { success: false, message: "Failed to parse server response" };
+  		}
+	} else {
+  		pdata = res;
+	}
+	
+	console.log(pdata);               // Shows parsed object
+	console.log(typeof pdata);        // Should now be "object"
+	console.log(pdata.success, pdata.message);
+	
+      if (pdata.success) {
         setClaimResult("Device registered successfully!");
         sessionStorage.setItem("Claim_stat", "Y");
         localStorage.setItem("token", sessionStorage.getItem("token"))
