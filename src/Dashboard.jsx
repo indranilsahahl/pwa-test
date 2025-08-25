@@ -93,13 +93,11 @@ export default function Dashboard() {
 
   return (
     <div className="gb-container dashboard-container gb-grid">
-      <div className="gb-header">
+      <section className="gb-header">
         <h1 className="gb-title">Dashboard</h1>
         <button className="gb-btn danger" onClick={onLogout}>Logout</button>
-      </div>
-
-      <div className="gb-grid">
-        <section className="gb-card">
+      </section>
+      <section className="gb-card">
           <h2>Login Session Data</h2>
           {sessionData.length === 0 ? (
             <div className="gb-footer">No session data found. Please login again.</div>
@@ -156,7 +154,6 @@ export default function Dashboard() {
           </table>
           <div className="gb-footer">Distance uses the Haversine formula.</div>
         </section>
-      </div>
-    </div>
+     </div>
   );
 }
