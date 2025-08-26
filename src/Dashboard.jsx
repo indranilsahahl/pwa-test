@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { claimDevice } from "./api.js";
 import { attendanceCheck } from "./api.js";
 import { attendaceLogin }  from "./api.js";
+import { attendaceLogout }  from "./api.js";
 import "./custom.css";
 
 export default function Dashboard() {

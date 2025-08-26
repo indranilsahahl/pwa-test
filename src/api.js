@@ -82,3 +82,22 @@ export async function attendaceLogin(empId, today, distance) {
    const json = await safeJson(response);
    return json; // expected { now_stat: "done" }
   }
+
+export async function attendaceLogout(empId, today, distance) {
+  const formData = new FormData();
+  formData.append("action", "attendanceLogout");
+  formData.append("emp_id", empId);
+  formData.append("w_day", today);
+  formData.append("distance", distance);
+
+  const response = await fetch(API_BASE, {
+    method: "POST",
+    body: formData,
+   });
+   if (!response.ok) {
+    throw new Error("Network response was not ok");
+   }
+
+   const json = await safeJson(response);
+   return json; // expected { now_stat: "done" }
+  }
