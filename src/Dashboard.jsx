@@ -65,7 +65,12 @@ export default function Dashboard() {
     return "done";
       	
   }; 
-  	
+  // Call getAttendanceStat when validForAttendance is 1
+    if (validForAttendance === 1) {
+      getAttendanceStat();
+    }
+  }, [validForAttendance]); // Run when validForAttendance changes
+   	
   const handleRegister = async () => {
     if (!empId) { setClaimResult("Employee ID not found."); return; }
     setClaiming(true); setClaimResult("");
@@ -174,7 +179,7 @@ export default function Dashboard() {
         <h2>Attendance Entry</h2>
         {validForAttendance === 1 ? (
           <>
-		This device can be used. {today} {getAttendanceStat}
+		This device can be used. {today}
           </>
         ) : (
           <div className="gb-footer">Device Token Does not match. </div>
