@@ -65,11 +65,12 @@ export default function Dashboard() {
     return "done";
       	
   }; 
-  // Call getAttendanceStat when validForAttendance is 1
+  /// Corrected useEffect for getAttendanceStat
+  useEffect(() => {
     if (validForAttendance === 1) {
-      	getAttendanceStat();
+      getAttendanceStat();
     }
-    }, [validForAttendance]); // Run when validForAttendance changes
+  }, [validForAttendance]);
      	
   const handleRegister = async () => {
     if (!empId) { setClaimResult("Employee ID not found."); return; }
