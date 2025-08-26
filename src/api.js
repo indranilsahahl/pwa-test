@@ -63,3 +63,21 @@ export async function attendanceCheck(empId, today) {
   const json = await safeJson(response);
   return json; // expected { now_stat: "done" }
 }
+
+export async function attendaceLogin(empId, today) {
+  const formData = new FormData();
+  formData.append("action", "attendanceCheck");
+  formData.append("emp_id", empId);
+  formData.append("w_day", today);
+
+  const response = await fetch(API_BASE, {
+    method: "POST",
+    body: formData,
+   });
+   if (!response.ok) {
+    throw new Error("Network response was not ok");
+   }
+
+   const json = await safeJson(response);
+   return json; // expected { now_stat: "done" }
+  }
