@@ -47,7 +47,7 @@ export async function claimDevice(empId) {
 
 export async function attendanceCheck(empId, today) {
   const formData = new FormData();
-  formData.append("action", "attendance");
+  formData.append("action", "attendanceCheck");
   formData.append("emp_id", empId);
   formData.append("w_day", today);
 
