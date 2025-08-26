@@ -49,6 +49,21 @@ export default function Dashboard() {
   const now = new Date();
 	now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
 	const today = now.toISOString().slice(0, 10);
+ 
+  const getAttendanceStat = async () => {
+     try {
+      const res = await attendanceCheck(empId, today);
+      console.log(res);
+      console.log(typeof(res));
+      console.log(res.keys);
+      }
+      catch (err) {
+      	console.log("Error: " + err.message);
+    } finally {
+       console.log("done Calling");
+    }
+      	
+  }; 
   	
   const handleRegister = async () => {
     if (!empId) { setClaimResult("Employee ID not found."); return; }
@@ -158,7 +173,7 @@ export default function Dashboard() {
         <h2>Attendance Entry</h2>
         {validForAttendance === 1 ? (
           <>
-		This device can be used. {today}
+		This device can be used. {today} {getAttendanceStat}
           </>
         ) : (
           <div className="gb-footer">Device Token Does not match. </div>

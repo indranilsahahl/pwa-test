@@ -44,3 +44,22 @@ export async function claimDevice(empId) {
   const json = await safeJson(response);
   return json; // expected { Stat: "OK", token: "xxxxx" }
 }
+
+export async function attendanceCheck(empId, today) {
+  const formData = new FormData();
+  formData.append("action", "attendance");
+  formData.append("emp_id", empId);
+  formData.append("w_day", today);
+
+  const response = await fetch(API_BASE, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
+
+  const json = await safeJson(response);
+  return json; // expected { now_stat: "done" }
+}
