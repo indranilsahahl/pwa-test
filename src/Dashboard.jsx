@@ -75,7 +75,7 @@ export default function Dashboard() {
   /// handleAttendanceLogin
   const handleAttendanceLogin = async () => {
      try {
-    const res = await attendaceLogin(empId, today);
+    const res = await attendaceLogin(empId, today, distance);
     console.log(res); // {now_stat: 'login'}
     //console.log(typeof res); // object
     //console.log(Object.keys(res)); // ['now_stat']

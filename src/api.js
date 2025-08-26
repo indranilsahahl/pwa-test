@@ -64,7 +64,7 @@ export async function attendanceCheck(empId, today) {
   return json; // expected { now_stat: "done" }
 }
 
-export async function attendaceLogin(empId, today) {
+export async function attendaceLogin(empId, today, distance) {
   const formData = new FormData();
   formData.append("action", "attendanceCheck");
   formData.append("emp_id", empId);
