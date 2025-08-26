@@ -89,7 +89,25 @@ export default function Dashboard() {
   }
   return "done";
   }; 
- 
+  
+  /// attendanceLogout 
+  /// handleAttendanceLogin
+  const handleAttendanceLogout = async () => {
+     try {
+    const res = await attendaceLogout(empId, today, distance);
+    console.log(res); // {now_stat: 'login'}
+    //console.log(typeof res); // object
+    //console.log(Object.keys(res)); // ['now_stat']
+    //console.log(attendanceStat);
+    setAttendanceStatus(`Attendance status: ${res.now_stat}`); // Update state with now_stat
+  } catch (err) {
+    console.log("Error: " + err.message);
+    	setAttendanceStatus("Error: " + err.message);
+  } finally {
+    console.log("done Calling login");
+  }
+  return "done";
+  }; 
   
   /// Corrected useEffect for getAttendanceStat
   useEffect(() => {
