@@ -232,6 +232,16 @@ export default function Dashboard() {
             		</button>	
 		):null}
 		
+		{attendaceStat === 'logout' ? (
+			<button className="gb-btn" disabled={claiming} 		
+				onClick={handleAttendanceLogout}>
+              			{claiming ? "Updating…" : "Logout Now"}
+            		</button>	
+		):null}
+		
+		{attendaceStat === 'done' ? (
+			All Done For the Day!
+		):null}
           </>
         ) : (
           <div className="gb-footer">Device Token Does not match. </div>
