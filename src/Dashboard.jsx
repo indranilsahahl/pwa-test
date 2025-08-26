@@ -50,7 +50,7 @@ export default function Dashboard() {
   const now = new Date();
 	now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
 	const today = now.toISOString().slice(0, 10);
- const attendanceStat = "None";
+  let attendanceStat = "None";
  
   const getAttendanceStat = async () => {
      try {
