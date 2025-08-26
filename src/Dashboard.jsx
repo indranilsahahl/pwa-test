@@ -54,7 +54,7 @@ export default function Dashboard() {
 	const today = now.toISOString().slice(0, 10);
   const [attendanceStat, setAttendanceStatus] = useState("");
  
- /// Get Attendance Status attendaceStat
+ /// Get Attendance Status attendanceStat
   const getAttendanceStat = async () => {
      try {
     const res = await attendanceCheck(empId, today);
@@ -225,22 +225,22 @@ export default function Dashboard() {
         {validForAttendance === 1 ? (
           <>
 		This device can be used. {today}
-		{attendaceStat === 'login' ? (
+		{attendanceStat === 'login' ? (
 			<button className="gb-btn" disabled={claiming} 		
 				onClick={handleAttendanceLogin}>
               			{claiming ? "Updating…" : "Login Now"}
             		</button>	
 		):null}
 		
-		{attendaceStat === 'logout' ? (
+		{attendanceStat === 'logout' ? (
 			<button className="gb-btn" disabled={claiming} 		
 				onClick={handleAttendanceLogout}>
               			{claiming ? "Updating…" : "Logout Now"}
             		</button>	
 		):null}
 		
-		{attendaceStat === 'done' ? (
-			{attendaceStat}
+		{attendanceStat === 'done' ? (
+			{attendanceStat}
 		):null}
           </>
         ) : (
