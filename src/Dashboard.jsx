@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import { claimDevice } from "./api.js";
+import { attendanceCheck } from "./api.js";
 import "./custom.css";
 
 export default function Dashboard() {
