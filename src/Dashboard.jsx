@@ -213,7 +213,7 @@ export default function Dashboard() {
 				onClick={handleAttendanceLogin}>
               			{claiming ? "Updating…" : "Login Now"}
             		</button>	
-		):()}
+		):null}
 		
           </>
         ) : (
