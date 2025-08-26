@@ -243,7 +243,7 @@ export default function Dashboard() {
 			{attendanceStat}
 		):null}
 		
-		console.log("Status = " + attendanceStat);
+		{attendanceStat};
           </>
         ) : (
           <div className="gb-footer">Device Token Does not match. </div>
