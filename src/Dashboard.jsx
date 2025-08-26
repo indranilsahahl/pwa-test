@@ -240,7 +240,7 @@ export default function Dashboard() {
 		):null}
 		
 		{attendanceStat === 'done' ? (
-			{attendanceStat}
+			<span>All {attendanceStat} For today</span>
 		):null}
 		
 		{attendanceStat};
