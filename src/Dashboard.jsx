@@ -53,17 +53,18 @@ export default function Dashboard() {
  
   const getAttendanceStat = async () => {
      try {
-      const res = await attendanceCheck(empId, today);
-      console.log(res);
-      console.log(typeof(res));
-      console.log(res.keys);
-      }
-      catch (err) {
-      	console.log("Error: " + err.message);
-    } finally {
-       console.log("done Calling");
-    }
-    return "done";
+    const res = await attendanceCheck(empId, today);
+    console.log(res); // {now_stat: 'login'}
+    console.log(typeof res); // object
+    console.log(Object.keys(res)); // ['now_stat']
+    setAttendanceStatus(`Attendance status: ${res.now_stat}`); // Update state with now_stat
+  } catch (err) {
+    console.log("Error: " + err.message);
+    setAttendanceStatus("Error: " + err.message);
+  } finally {
+    console.log("done Calling");
+  }
+  return "done";
       	
   }; 
   /// Corrected useEffect for getAttendanceStat
