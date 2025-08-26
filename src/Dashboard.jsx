@@ -78,9 +78,8 @@ export default function Dashboard() {
     console.log(res); // {now_stat: 'login'}
     //console.log(typeof res); // object
     //console.log(Object.keys(res)); // ['now_stat']
-    attendanceStat = res.now_stat;
     //console.log(attendanceStat);
-    // setAttendanceStatus(`Attendance status: ${res.now_stat}`); // Update state with now_stat
+    setAttendanceStatus(`Attendance status: ${res.now_stat}`); // Update state with now_stat
   } catch (err) {
     console.log("Error: " + err.message);
     	setAttendanceStatus("Error: " + err.message);
