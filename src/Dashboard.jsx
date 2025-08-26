@@ -242,6 +242,8 @@ export default function Dashboard() {
 		{attendanceStat === 'done' ? (
 			{attendanceStat}
 		):null}
+		
+		console.log("Status = " + attendanceStat);
           </>
         ) : (
           <div className="gb-footer">Device Token Does not match. </div>
