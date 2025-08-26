@@ -21,12 +21,6 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    // Call getAttendanceStat when validForAttendance is 1
-    if (validForAttendance === 1) {
-      	getAttendanceStat();
-    }
-    }, [validForAttendance]); // Run when validForAttendance changes
-  	
     if (!("geolocation" in navigator)) {
       setGeo((g) => ({ ...g, error: "Geolocation not supported" }));
       return;
@@ -71,7 +65,12 @@ export default function Dashboard() {
     return "done";
       	
   }; 
-   	
+  // Call getAttendanceStat when validForAttendance is 1
+    if (validForAttendance === 1) {
+      	getAttendanceStat();
+    }
+    }, [validForAttendance]); // Run when validForAttendance changes
+     	
   const handleRegister = async () => {
     if (!empId) { setClaimResult("Employee ID not found."); return; }
     setClaiming(true); setClaimResult("");
