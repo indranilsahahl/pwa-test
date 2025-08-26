@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState, useReducer } from "react";
 import { useNavigate } from "react-router-dom";
 import { claimDevice } from "./api.js";
 import { attendanceCheck } from "./api.js";
+import { attendaceLogin }  from "./api.js";
 import "./custom.css";
 
 export default function Dashboard() {
@@ -52,6 +53,7 @@ export default function Dashboard() {
 	const today = now.toISOString().slice(0, 10);
   let attendanceStat = "None";
  
+ /// Get Attendance Status attendaceStat
   const getAttendanceStat = async () => {
      try {
     const res = await attendanceCheck(empId, today);
@@ -63,13 +65,33 @@ export default function Dashboard() {
     // setAttendanceStatus(`Attendance status: ${res.now_stat}`); // Update state with now_stat
   } catch (err) {
     console.log("Error: " + err.message);
-    setAttendanceStatus("Error: " + err.message);
+    // setAttendanceStatus("Error: " + err.message);
   } finally {
     console.log("done Calling");
   }
   return "done";
-      	
   }; 
+  
+  /// handleAttendanceLogin
+  const handleAttendanceLogin = async () => {
+     try {
+    const res = await attendaceLogin(empId, today);
+    console.log(res); // {now_stat: 'login'}
+    //console.log(typeof res); // object
+    //console.log(Object.keys(res)); // ['now_stat']
+    attendanceStat = res.now_stat;
+    //console.log(attendanceStat);
+    // setAttendanceStatus(`Attendance status: ${res.now_stat}`); // Update state with now_stat
+  } catch (err) {
+    console.log("Error: " + err.message);
+    // setAttendanceStatus("Error: " + err.message);
+  } finally {
+    console.log("done Calling login");
+  }
+  return "done";
+  }; 
+ 
+  
   /// Corrected useEffect for getAttendanceStat
   useEffect(() => {
     if (validForAttendance === 1) {
@@ -186,6 +208,13 @@ export default function Dashboard() {
         {validForAttendance === 1 ? (
           <>
 		This device can be used. {today}
+		{attendaceStat === 'login' ? (
+			<button className="gb-btn" disabled={claiming} 		
+				onClick={handleAttendanceLogin}>
+              			{claiming ? "Updating…" : "Login Now"}
+            		</button>	
+		)}
+		
           </>
         ) : (
           <div className="gb-footer">Device Token Does not match. </div>
