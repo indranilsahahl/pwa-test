@@ -66,9 +66,10 @@ export async function attendanceCheck(empId, today) {
 
 export async function attendaceLogin(empId, today, distance) {
   const formData = new FormData();
-  formData.append("action", "attendanceCheck");
+  formData.append("action", "attendanceLogin");
   formData.append("emp_id", empId);
   formData.append("w_day", today);
+  formData.append("distance", distance);
 
   const response = await fetch(API_BASE, {
     method: "POST",

@@ -51,7 +51,7 @@ export default function Dashboard() {
   const now = new Date();
 	now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
 	const today = now.toISOString().slice(0, 10);
-  let attendanceStat = "None";
+  const [attendanceStat, setAttendanceStatus] = useState("");
  
  /// Get Attendance Status attendaceStat
   const getAttendanceStat = async () => {
@@ -62,10 +62,10 @@ export default function Dashboard() {
     console.log(Object.keys(res)); // ['now_stat']
     attendanceStat = res.now_stat;
     console.log(attendanceStat);
-    // setAttendanceStatus(`Attendance status: ${res.now_stat}`); // Update state with now_stat
+    setAttendanceStatus(`Attendance status: ${res.now_stat}`); // Update state with now_stat
   } catch (err) {
     console.log("Error: " + err.message);
-    // setAttendanceStatus("Error: " + err.message);
+    setAttendanceStatus("Error: " + err.message);
   } finally {
     console.log("done Calling");
   }
@@ -84,7 +84,7 @@ export default function Dashboard() {
     // setAttendanceStatus(`Attendance status: ${res.now_stat}`); // Update state with now_stat
   } catch (err) {
     console.log("Error: " + err.message);
-    // setAttendanceStatus("Error: " + err.message);
+    	setAttendanceStatus("Error: " + err.message);
   } finally {
     console.log("done Calling login");
   }
