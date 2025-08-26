@@ -240,7 +240,7 @@ export default function Dashboard() {
 		):null}
 		
 		{attendaceStat === 'done' ? (
-			All Done For the Day!
+			{'All Done For the Day!'}
 		):null}
           </>
         ) : (
