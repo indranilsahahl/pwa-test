@@ -62,7 +62,7 @@ export default function Dashboard() {
     console.log(typeof res); // object
     console.log(Object.keys(res)); // ['now_stat']
     console.log(attendanceStat);
-    setAttendanceStatus(`Attendance status: ${res.now_stat}`); // Update state with now_stat
+    setAttendanceStatus(res.now_stat); // Update state with now_stat
   } catch (err) {
     console.log("Error: " + err.message);
     setAttendanceStatus("Error: " + err.message);
@@ -80,7 +80,7 @@ export default function Dashboard() {
     //console.log(typeof res); // object
     //console.log(Object.keys(res)); // ['now_stat']
     //console.log(attendanceStat);
-    setAttendanceStatus(`Attendance status: ${res.now_stat}`); // Update state with now_stat
+    setAttendanceStatus(res.now_stat); // Update state with now_stat
   } catch (err) {
     console.log("Error: " + err.message);
     	setAttendanceStatus("Error: " + err.message);
@@ -99,7 +99,7 @@ export default function Dashboard() {
     //console.log(typeof res); // object
     //console.log(Object.keys(res)); // ['now_stat']
     //console.log(attendanceStat);
-    setAttendanceStatus(`Attendance status: ${res.now_stat}`); // Update state with now_stat
+    setAttendanceStatus(res.now_stat); // Update state with now_stat
   } catch (err) {
     console.log("Error: " + err.message);
     	setAttendanceStatus("Error: " + err.message);
