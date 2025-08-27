@@ -101,9 +101,9 @@ export default function Dashboard() {
     }
   };
 
-  const getAttendanceStat = () => await callApi(attendanceCheck, empId, today);
-  const handleAttendanceLogin = () => await callApi(attendanceLogin, empId, today, distance);
-  const handleAttendanceLogout = () => await callApi(attendanceLogout, empId, today, distance);
+  const getAttendanceStat = () => callApi(attendanceCheck, empId, today);
+  const handleAttendanceLogin = () => callApi(attendanceLogin, empId, today, distance);
+  const handleAttendanceLogout = () => callApi(attendanceLogout, empId, today, distance);
 
   useEffect(() => {
     if (validForAttendance === 1 && empId) {
@@ -256,32 +256,46 @@ export default function Dashboard() {
       {renderClaimStatus()}
 
       <section className="gb-card">
-        <h2>Attendance Entry</h2>
-        {validForAttendance === 1 ? (
-          <>
-            This device can be used — For {todayDisplay}
-            <br />
-            {(attendanceStat === "none" || attendanceStat === "logout") && (
-              <button className="gb-btn" disabled={claiming} onClick={handleAttendanceLogin}>
-                {claiming ? "Updating…" : "Login Now"}
-              </button>
-            )}
-            {attendanceStat === "login" && (
-              <button className="gb-btn" disabled={claiming} onClick={handleAttendanceLogout}>
-                {claiming ? "Updating…" : "Logout Now"}
-              </button>
-            )}
-            {attendanceStat === "done" && <span>All {attendanceStat} for today</span>}
-            {attendanceStat?.startsWith?.("Error") && (
-              <div className="gb-footer">{attendanceStat}</div>
-            )}
-            <br />
-            <span>{attendanceStat}</span>
-          </>
-        ) : (
-          <div className="gb-footer">Device Token Does not match.</div>
-        )}
-      </section>
+  <h2>Attendance Entry</h2>
+
+  {validForAttendance === 1 ? (
+    <>
+      This device can be used — For {todayDisplay}
+      <br />
+
+      {/* Login button */}
+      {(attendanceStat === "" || attendanceStat === "none" || attendanceStat === "logout") && (
+        <button  className="gb-btn" disabled={claiming} 
+        	onClick={() => callApi(handleAttendanceLogin, empId, today)}>
+          {claiming ? "Updating…" : "Login Now"}
+        </button>
+      )}
+
+      {/* Logout button */}
+      {attendanceStat === "login" && (
+        <button className="gb-btn" disabled={claiming}
+           onClick={() => callApi(handleAttendanceLogout, empId, today)}>
+          {claiming ? "Updating…" : "Logout Now"}
+        </button>
+      )}
+
+      {/* Done state */}
+      {attendanceStat === "done" && (
+        <span>All attendance marked for today</span>
+      )}
+
+      {/* Error display */}
+      {attendanceStat?.startsWith?.("Error") && (
+        <div className="gb-footer">{attendanceStat}</div>
+      )}
+
+      <br />
+      <span>{attendanceStat}</span>
+     </>
+    ) : (
+    <div className="gb-footer">Device Token does not match.</div>
+  )}
+   </section>
     </div>
   );
 }
