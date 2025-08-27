@@ -83,9 +83,9 @@
   border-radius: 12px;
   overflow: auto;
 }
-.gb-table tr:nth-child(odd) { background: rgba(255,255,255,0.02); }
+.gb-table tr:nth-child(odd) { background: rgba(255,255,200,0.3); }
 .gb-table th, .gb-table td {
-  padding: 10px 12px;
+  padding: 2px 2px;
   border-bottom: 1px solid var(--gb-border);
   vertical-align: top;
 }

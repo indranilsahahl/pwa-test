@@ -5,34 +5,48 @@ import Dashboard from "./Dashboard";
 
 // ---------------- LOGIN PAGE ----------------
 function LoginPage() {
+  const navigate = useNavigate();   // add this at the top
   const [empId, setEmpId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [tokenStatus, setTokenStatus] = useState("Not Logged In");
-  const [location, setLocation] = useState(null);
+  const [tokenStatus, setTokenStatus] = useState(localStorage.getItem("token") ?? "None");
 
-  const navigate = useNavigate();
+  useEffect(() => {
+  const syncToken = () => {
+    setTokenStatus(localStorage.getItem("token") ?? "None");
+  };
+
+  	window.addEventListener("storage", syncToken);
+  	return () => window.removeEventListener("storage", syncToken);
+  }, []);
     
   // ✅ Get location on mount
+  const [location, setLocation] = useState(null);
+
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
+     if (navigator.geolocation) {
+      const watchId = navigator.geolocation.watchPosition(
         (pos) =>
           setLocation({
             lat: pos.coords.latitude,
             lon: pos.coords.longitude,
             accuracy: pos.coords.accuracy,
           }),
-        (err) => setLocation({ error: err.message })
+        (err) => setLocation({ error: err.message }),
+        {
+          enableHighAccuracy: true,
+          maximumAge: 1000,
+          timeout: 5000,
+        }
       );
+
+      return () => navigator.geolocation.clearWatch(watchId);
     } else {
       setLocation({ error: "Geolocation not supported" });
     }
-    // Get the tokenStatus from localStorage
-    setTokenStatus(localStorage.getItem("token") || "No Token");
-
   }, []);
 
+  // ✅ Handle login submit
   const handleSubmit = async (e) => {
   e.preventDefault();
   setError(""); // reset any previous error
@@ -46,7 +60,7 @@ function LoginPage() {
 	sessionStorage.setItem("br_lat", data.br_lat);
 	sessionStorage.setItem("br_long", data.br_long);
 	sessionStorage.setItem("token", data.token);
-	sessionStorage.setItem("Claim_stat", data.Claim_Stat);
+	sessionStorage.setItem("Claim_Stat", data.Claim_Stat);
 	sessionStorage.setItem("Emp_name", data.Name);
 	sessionStorage.setItem("home_branch", data.home_branch);
 
@@ -155,25 +169,25 @@ function LoginPage() {
           </thead>
           <tbody>
             <tr>
-              <td className="gb_tb_border_all gb-black">Registration status</td>
+              <td className="gb_tb_border_all gb-black">Device Token</td>
               <td className="gb_tb_border_all gb-black">{tokenStatus}</td>
             </tr>
             <tr>
               <td className="gb_tb_border_all gb-black">Latitude</td>
               <td className="gb_tb_border_all gb-black">
-                {location?.lat || location?.error || "Loading..."}
+                {location?.lat ?? location?.error ?? "Loading..."}
               </td>
             </tr>
             <tr>
               <td className="gb_tb_border_all gb-black">Longitude</td>
               <td className="gb_tb_border_all gb-black">
-                {location?.lon || location?.error || "Loading..."}
+                {location?.lon ?? location?.error ?? "Loading..."}
               </td>
             </tr>
             <tr>
               <td className="gb_tb_border_all gb-black">Accuracy (m)</td>
               <td className="gb_tb_border_all gb-black">
-                {location?.accuracy || location?.error || "Loading..."}
+                {location?.accuracy ?? location?.error ?? "Loading..."}
               </td>
             </tr>
           </tbody>

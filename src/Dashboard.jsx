@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo, useState, useReducer } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { claimDevice } from "./api.js";
 import { attendanceCheck } from "./api.js";
-import { attendaceLogin }  from "./api.js";
-import { attendaceLogout }  from "./api.js";
+import { attendanceLogin }  from "./api.js";
+import { attendanceLogout }  from "./api.js";
 import "./custom.css";
 
 export default function Dashboard() {
@@ -12,9 +12,10 @@ export default function Dashboard() {
   const [claimResult, setClaimResult] = useState("");
   const [geo, setGeo] = useState({ lat: null, long: null, accuracy: null, error: null });
   const [distance, setDistance] = useState(null);
-
+  const [claimStatus, setClaimStatus] = useState(null); 
+	
   const sessionData = useMemo(() => {
-    const keys = ["Stat", "token", "Claim_stat", "Emp_name", "empl_id", "home_branch", "br_lat", "br_long"];
+    const keys = ["Stat", "token", "Claim_Stat", "Emp_name", "empl_id", "home_branch", "br_lat", "br_long"];
     const labels = { Stat: "Status", token: "Auth Token", Claim_stat: "Claim Status", Emp_name: "Employee Name", empl_id: "Employee ID", home_branch: "Home Branch", br_lat: "Branch Latitude", br_long: "Branch Longitude" };
     return keys.reduce((arr, key) => {
       const val = sessionStorage.getItem(key);
@@ -28,8 +29,9 @@ export default function Dashboard() {
       setGeo((g) => ({ ...g, error: "Geolocation not supported" }));
       return;
     }
-    navigator.geolocation.getCurrentPosition(
-      ({ coords }) => {
+    navigator.geolocation.watchPosition(
+      (pos) => {
+        const { latitude, longitude, accuracy } = pos.coords;
         const brLat = Number(sessionStorage.getItem("br_lat"));
         const brLong = Number(sessionStorage.getItem("br_long"));
         const d = (isFinite(brLat) && isFinite(brLong))
@@ -44,70 +46,32 @@ export default function Dashboard() {
   }, []);
 
   const onLogout = () => { sessionStorage.clear(); navigate("/"); };
+  const claimStatusFromSession = sessionData.find(([lbl]) => lbl === "Claim Status")?.[1];
 
-  const claimStatus = sessionData.find(([lbl]) => lbl === "Claim Status")?.[1];
   const empId = sessionData.find(([lbl]) => lbl === "Employee ID")?.[1];
   const validForAttendance =
     localStorage.getItem("token") === sessionStorage.getItem("token") ? 1 : 0;
   const now = new Date();
 	now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
 	const today = now.toISOString().slice(0, 10);
+	// frontend: DD/MM/YYYY
+   const todayDisplay = now.toLocaleDateString("en-GB"); 
   const [attendanceStat, setAttendanceStatus] = useState("");
  
- /// Get Attendance Status attendanceStat
-  const getAttendanceStat = async () => {
-     try {
-    const res = await attendanceCheck(empId, today);
-    console.log(res); // {now_stat: 'login'}
-    console.log(typeof res); // object
-    console.log(Object.keys(res)); // ['now_stat']
-    console.log(attendanceStat);
-    setAttendanceStatus(res.now_stat); // Update state with now_stat
+ const callApi = async (fn, ...args) => {
+  try {
+    const res = await fn(...args);
+    setAttendanceStatus(res.now_stat);
   } catch (err) {
-    console.log("Error: " + err.message);
     setAttendanceStatus("Error: " + err.message);
-  } finally {
-    console.log("done Calling");
   }
-  return "done";
-  }; 
-  
+ };
+ /// Get Attendance Status attendanceStat
+  const getAttendanceStat = () => callApi(attendanceCheck, empId, today);
   /// handleAttendanceLogin
-  const handleAttendanceLogin = async () => {
-     try {
-    const res = await attendaceLogin(empId, today, distance);
-    console.log(res); // {now_stat: 'login'}
-    //console.log(typeof res); // object
-    //console.log(Object.keys(res)); // ['now_stat']
-    //console.log(attendanceStat);
-    setAttendanceStatus(res.now_stat); // Update state with now_stat
-  } catch (err) {
-    console.log("Error: " + err.message);
-    	setAttendanceStatus("Error: " + err.message);
-  } finally {
-    console.log("done Calling login");
-  }
-  return "done";
-  }; 
-  
-  /// attendanceLogout 
-  /// handleAttendanceLogin
-  const handleAttendanceLogout = async () => {
-     try {
-    const res = await attendaceLogout(empId, today, distance);
-    console.log(res); // {now_stat: 'login'}
-    //console.log(typeof res); // object
-    //console.log(Object.keys(res)); // ['now_stat']
-    //console.log(attendanceStat);
-    setAttendanceStatus(res.now_stat); // Update state with now_stat
-  } catch (err) {
-    console.log("Error: " + err.message);
-    	setAttendanceStatus("Error: " + err.message);
-  } finally {
-    console.log("done Calling login");
-  }
-  return "done";
-  }; 
+  const handleAttendanceLogin = () => callApi(attendanceLogin, empId, today, distance);  
+  /// handleAttendanceLogout
+  const handleAttendanceLogout = () => callApi(attendanceLogout, empId, today, distance); 
   
   /// Corrected useEffect for getAttendanceStat
   useEffect(() => {
@@ -115,46 +79,41 @@ export default function Dashboard() {
       getAttendanceStat();
     }
   }, [validForAttendance]);
-     	
+  
+  // handleRegister   	
   const handleRegister = async () => {
-    if (!empId) { setClaimResult("Employee ID not found."); return; }
-    setClaiming(true); setClaimResult("");
-    try {
-      const res = await claimDevice(empId);
-      console.log(res);
-      console.log(typeof(res));
-      console.log(res.keys);
-      let pdata;
-      if (typeof res === "string") {
-  	try {
-    		pdata = JSON.parse(res);
-  		} catch (err) {
-    			console.error("Failed to parse JSON:", err, res);
-    		// Optionally handle invalid JSON cases here
-    			pdata = { success: false, message: "Failed to parse server response" };
-  		}
-	} else {
-  		pdata = res;
-	}
-	
-	console.log(pdata);               // Shows parsed object
-	console.log(typeof pdata);        // Should now be "object"
-	console.log(pdata.success, pdata.message);
-	
-      if (pdata.success) {
-        setClaimResult("Device registered successfully!");
-        sessionStorage.setItem("Claim_stat", "Y");
-        localStorage.setItem("token", sessionStorage.getItem("token"));
-      } else {
-        setClaimResult(res?.message || "Registration failed.");
-      }
-    } catch (err) {
-      setClaimResult("Error: " + err.message);
-    } finally {
-      setClaiming(false);
-    }
-    window.location.reload();
-  };
+  if (!empId) {
+    setClaimResult("Employee ID not found.");
+    return;
+  }
+
+  setClaiming(true);
+  setClaimResult("");
+
+  try 	{
+    	const pdata = await claimDevice(empId);
+    	console.log("claimDevice response:", pdata);
+
+    	if (pdata.success) {
+      		setClaimResult("Device registered successfully!");
+      		sessionStorage.setItem("Claim_stat", "Y");
+      		localStorage.setItem("token", sessionStorage.getItem("token"));
+
+      	// ✅ Refresh state instead of reload
+      	const status = await checkClaimStatus(empId);
+      	setClaimStatus(status);
+    	} else {
+      		setClaimResult(pdata.message || "Registration failed.");
+    	}
+  	} catch (err) {
+    		console.error("Registration error:", err);
+    		setClaimResult("Error: " + err.message);
+  	} finally {
+    		setClaiming(false);
+  	}
+ };
+
+  // Start of the main body here
 
   return (
     <div className="dashboard-container">
@@ -209,7 +168,7 @@ export default function Dashboard() {
 
       <section className="gb-card">
         <h2>Device Claim Status</h2>
-        {claimStatus === "N" ? (
+        {claimStatusFromSession === "N" ? (
           <>
             <button className="gb-btn" disabled={claiming} onClick={handleRegister}>
               {claiming ? "Registering…" : "Register This Device"}
@@ -217,14 +176,14 @@ export default function Dashboard() {
             {claimResult && <div className="gb-footer">{claimResult}</div>}
           </>
         ) : (
-          <div className="gb-footer">User is already registered</div>
+          <div className="gb-footer">User is already registered in some device</div>
         )}
       </section>
       <section className="gb-card">
         <h2>Attendance Entry</h2>
         {validForAttendance === 1 ? (
           <>
-		This device can be used. {today}
+		This device can be used - For {todayDisplay} <br />
 		{attendanceStat === 'login' ? (
 			<button className="gb-btn" disabled={claiming} 		
 				onClick={handleAttendanceLogin}>
@@ -243,7 +202,7 @@ export default function Dashboard() {
 			<span>All {attendanceStat} For today</span>
 		):null}
 		
-		{attendanceStat};
+		<br/> <span> {attendanceStat}; </span>
           </>
         ) : (
           <div className="gb-footer">Device Token Does not match. </div>

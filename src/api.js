@@ -64,7 +64,7 @@ export async function attendanceCheck(empId, today) {
   return json; // expected { now_stat: "done" }
 }
 
-export async function attendaceLogin(empId, today, distance) {
+export async function attendanceLogin(empId, today, distance) {
   const formData = new FormData();
   formData.append("action", "attendanceLogin");
   formData.append("emp_id", empId);
@@ -83,7 +83,7 @@ export async function attendaceLogin(empId, today, distance) {
    return json; // expected { now_stat: "done" }
   }
 
-export async function attendaceLogout(empId, today, distance) {
+export async function attendanceLogout(empId, today, distance) {
   const formData = new FormData();
   formData.append("action", "attendanceLogout");
   formData.append("emp_id", empId);
