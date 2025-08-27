@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { claimDevice, attendanceCheck, attendanceLogin, attendanceLogout } from "./api.js";
-import AttendanceEntry from "./AttendanceEntry.jsx";
+import AttendanceEntry from "./AttendanceEntry";
 import "./custom.css";
 
 export default function Dashboard() {
