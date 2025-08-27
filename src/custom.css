@@ -125,6 +125,7 @@
   border-radius: 12px;
   display:flex;
   flex-direction:column;
+  gap: 10px;
   flex: none;              /* Prevent growth/shrinkage */
   width: 100% !important;  /* Force full-width for each item */
 }
