@@ -118,12 +118,15 @@ export default function Dashboard() {
   const handleAttendanceLogin = async () => {
   	await callApi(attendanceLogin, empId, today, distance);
   	await getAttendanceStat();
+  	setLogTick((t) => t + 1); // trigger AttendanceLog to reload
   };
   const handleAttendanceLogout = async () => {
   	await callApi(attendanceLogout, empId, today, distance);
   	await getAttendanceStat();
+  	setLogTick((t) => t + 1); // trigger AttendanceLog to reload
   };
-
+  const [logTick, setLogTick] = useState(0);
+	
   useEffect(() => {
     if (validForAttendance === 1 && empId) {
       getAttendanceStat();
@@ -285,7 +288,8 @@ export default function Dashboard() {
       />
 
     {/* Attendance Log Section */}
-      <AttendanceLog empId={empId} />	
+      <AttendanceLog empId={empId} reloadTrigger={logTick} />
+
     </div>
   );
 }

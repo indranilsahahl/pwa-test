@@ -8,7 +8,7 @@ function formatDate(dateStr) {
   return `${day}/${month}/${year}`;
 }
 
-export default function AttendanceLog({ empId }) {
+export default function AttendanceLog({ empId, reloadTrigger  }) {
   const [logs, setLogs] = useState([]);
   const [error, setError] = useState("");
 
@@ -24,7 +24,7 @@ export default function AttendanceLog({ empId }) {
     };
 
     if (empId) loadLogs();
-  }, [empId]);
+  }, [empId, reloadTrigger]);
 
   return (
     <section className="gb-card">
