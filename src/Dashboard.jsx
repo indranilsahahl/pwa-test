@@ -1,6 +1,8 @@
+// ✅ Daashboard.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { claimDevice, attendanceCheck, attendanceLogin, attendanceLogout } from "./api.js";
+import AttendanceEntry from "./AttendanceEntry";
 import "./custom.css";
 
 export default function Dashboard() {
@@ -93,17 +95,33 @@ export default function Dashboard() {
 
   // --- API helper ---
   const callApi = async (fn, ...args) => {
-    try {
-      const res = await fn(...args);
-      setAttendanceStatus(res?.now_stat ?? "");
+  setClaiming(true);
+  try {
+    const res = await fn(...args);
+    setAttendanceStatus(res?.now_stat ?? "");
     } catch (err) {
-      setAttendanceStatus("Error: " + err.message);
-    }
+    		setAttendanceStatus("Error: " + err.message);
+        } finally {
+    	setClaiming(false);
+  	}
   };
-
-  const getAttendanceStat = () => callApi(attendanceCheck, empId, today);
-  const handleAttendanceLogin = () => callApi(attendanceLogin, empId, today, distance);
-  const handleAttendanceLogout = () => callApi(attendanceLogout, empId, today, distance);
+  // --- fetch current attendance state ---
+   const getAttendanceStat = async () => {
+  	try {
+    		const res = await attendanceCheck(empId, today);
+    		setAttendanceStatus(res?.now_stat ?? "");
+  	} catch (err) {
+    		setAttendanceStatus("Error: " + err.message);
+  	}
+   };
+  const handleAttendanceLogin = async () => {
+  	await callApi(attendanceLogin, empId, today, distance);
+  	await getAttendanceStat();
+  };
+  const handleAttendanceLogout = async () => {
+  	await callApi(attendanceLogout, empId, today, distance);
+  	await getAttendanceStat();
+  };
 
   useEffect(() => {
     if (validForAttendance === 1 && empId) {
@@ -255,47 +273,16 @@ export default function Dashboard() {
 
       {renderClaimStatus()}
 
-      <section className="gb-card">
-  <h2>Attendance Entry</h2>
+     <AttendanceEntry
+	  validForAttendance={validForAttendance}
+	  todayDisplay={todayDisplay}
+	  attendanceStat={attendanceStat}
+	  claiming={claiming}
+	  handleAttendanceLogin={handleAttendanceLogin}
+	  handleAttendanceLogout={handleAttendanceLogout}
+      />
 
-  {validForAttendance === 1 ? (
-    <>
-      This device can be used — For {todayDisplay}
-      <br />
 
-      {/* Login button */}
-      {(attendanceStat === "" || attendanceStat === "none" || attendanceStat === "logout") && (
-        <button  className="gb-btn" disabled={claiming} 
-        	onClick={() => callApi(handleAttendanceLogin, empId, today)}>
-          {claiming ? "Updating…" : "Login Now"}
-        </button>
-      )}
-
-      {/* Logout button */}
-      {attendanceStat === "login" && (
-        <button className="gb-btn" disabled={claiming}
-           onClick={() => callApi(handleAttendanceLogout, empId, today)}>
-          {claiming ? "Updating…" : "Logout Now"}
-        </button>
-      )}
-
-      {/* Done state */}
-      {attendanceStat === "done" && (
-        <span>All attendance marked for today</span>
-      )}
-
-      {/* Error display */}
-      {attendanceStat?.startsWith?.("Error") && (
-        <div className="gb-footer">{attendanceStat}</div>
-      )}
-
-      <br />
-      <span>{attendanceStat}</span>
-     </>
-    ) : (
-    <div className="gb-footer">Device Token does not match.</div>
-  )}
-   </section>
     </div>
   );
 }
