@@ -2,12 +2,8 @@
 import React from "react";
 
 export default function AttendanceEntry({
-  validForAttendance,
-  todayDisplay,
-  attendanceStat,
-  claiming,
-  handleAttendanceLogin,
-  handleAttendanceLogout,
+  validForAttendance, todayDisplay,  attendanceStat, claiming,  
+  	handleAttendanceLogin, handleAttendanceLogout,
 }) {
  	// Wrapper functions for confirm dialogs
  	 const confirmLogin = () => {

@@ -1,3 +1,4 @@
+// ✅ api.js
 const API_BASE = "https://eyespace.co.in/gberp/hr/attendance.php";
 
 
@@ -101,3 +102,21 @@ export async function attendanceLogout(empId, today, distance) {
    const json = await safeJson(response);
    return json; // expected { now_stat: "done" }
   }
+
+export async function fetchLogs(empId) {
+  const formData = new FormData();
+  formData.append("action", "getAttendanceLog");
+  formData.append("emp_id", empId);
+
+  const response = await fetch(API_BASE, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Network error");
+  }
+
+  const json = await safeJson(response); // expected array of logs
+  return json;
+}
