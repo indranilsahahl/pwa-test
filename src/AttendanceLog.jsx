@@ -2,6 +2,12 @@
 import React, { useEffect, useState } from "react";
 import { fetchLogs } from "./api.js";
 
+function formatDate(dateStr) {
+  if (!dateStr) return "";
+  const [year, month, day] = dateStr.split("-");
+  return `${day}/${month}/${year}`;
+}
+
 export default function AttendanceLog({ empId }) {
   const [logs, setLogs] = useState([]);
   const [error, setError] = useState("");
@@ -43,7 +49,7 @@ export default function AttendanceLog({ empId }) {
                 {/* Date row */}
                 <tr>
                   <th colSpan={3} className="bg-gray-200 text-left font-bold">
-                    {row.which_date}
+                    {formatDate(row.which_date)}
                   </th>
                 </tr>
 
