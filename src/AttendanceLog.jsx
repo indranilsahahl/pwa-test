@@ -1,17 +1,15 @@
 // ✅ AttendanceLog.jsx
 import React, { useEffect, useState } from "react";
-import { fetchLogs } from "./api.js"; // ✅ use curly braces as it is a function
+import { fetchLogs } from "./api.js";
 
 export default function AttendanceLog({ empId }) {
   const [logs, setLogs] = useState([]);
   const [error, setError] = useState("");
 
-
   useEffect(() => {
     const loadLogs = async () => {
       try {
-        const data = await fetchLogs(empId); // pass empId
-        console.log(data);
+        const data = await fetchLogs(empId);
         setLogs(data);
       } catch (err) {
         console.error("Failed to load logs:", err);
@@ -19,39 +17,47 @@ export default function AttendanceLog({ empId }) {
       }
     };
 
-    if (empId) loadLogs(); // only fetch if empId is available
+    if (empId) loadLogs();
   }, [empId]);
 
   return (
     <section className="gb-card">
       <h2>Attendance Log</h2>
+
+      {error && <div className="text-red-600">{error}</div>}
+
       {logs.length === 0 ? (
         <div>No logs found</div>
       ) : (
         <table className="gb-table">
           <thead>
-   		 <tr>  <th>Time</th>  <th>Error</th> </tr>
-  	  </thead> 	
+            <tr>
+              <th>Time</th>
+              <th>Error</th>
+              <th>Type</th>
+            </tr>
+          </thead>
           <tbody>
-  		{logs.map((row, index) => (
-	    <React.Fragment key={row.which_date}>
-      		{/* Date row as a section header */}
-      		<tr>
-        	<th colSpan={2} className="bg-gray-200 text-left font-bold">
-          		{row.which_date}
-        	</th>
-      		</tr>
+            {logs.map((row) => (
+              <React.Fragment key={row.which_date}>
+                {/* Date row */}
+                <tr>
+                  <th colSpan={3} className="bg-gray-200 text-left font-bold">
+                    {row.which_date}
+                  </th>
+                </tr>
 
-     	 {/* Entry rows */}
-      	{row.entries.map((entry, i) => (
-        <tr key={entry.login_time || entry.logout_time}>
-          <td className="pl-6">{entry.login_time || entry.logout_time}</td>
-          <td>{entry.login_error || entry.logout_error}</td>
-        </tr>
-      		))}
-    	</React.Fragment>
-  		))}
-		</tbody>
+                {/* Entry rows */}
+                {row.entries.map((entry, i) => (
+                  <tr key={i}>
+                    <td className="pl-6">{entry.time || "-"}</td>
+                    <td>{entry.error || "-"}</td>
+                    <td className="italic text-gray-600">{entry.type}</td>
+                  </tr>
+                ))}
+              </React.Fragment>
+            ))}
+          </tbody>
         </table>
       )}
     </section>
