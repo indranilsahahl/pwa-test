@@ -11,6 +11,7 @@ export default function AttendanceLog({ empId }) {
     const loadLogs = async () => {
       try {
         const data = await fetchLogs(empId); // pass empId
+        console.log(data);
         setLogs(data);
       } catch (err) {
         console.error("Failed to load logs:", err);
