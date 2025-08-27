@@ -9,6 +9,18 @@ export default function AttendanceEntry({
   handleAttendanceLogin,
   handleAttendanceLogout,
 }) {
+ 	// Wrapper functions for confirm dialogs
+ 	 const confirmLogin = () => {
+ 	   if (window.confirm("Are you sure you want to Login?")) {
+ 	     handleAttendanceLogin();
+ 	   }
+ 	 };
+
+ 	 const confirmLogout = () => {
+ 	   if (window.confirm("Are you sure you want to Logout?")) {
+ 	     handleAttendanceLogout();
+ 	   }
+ 	 };
   return (
     <section className="gb-card">
       <h2>Attendance Entry</h2>
@@ -19,11 +31,11 @@ export default function AttendanceEntry({
           <br />
 
           {/* Login button */}
-          {(attendanceStat === "" || attendanceStat === "none" || attendanceStat === "logout") && (
+          {(attendanceStat === "" || attendanceStat === "none" ) && (
             <button
               className="gb-btn"
               disabled={claiming}
-              onClick={handleAttendanceLogin}
+              onClick={confirmLogin}
             >
               {claiming ? "Updating…" : "Login Now"}
             </button>
@@ -34,14 +46,14 @@ export default function AttendanceEntry({
             <button
               className="gb-btn"
               disabled={claiming}
-              onClick={handleAttendanceLogout}
+              onClick={confirmLogout}
             >
               {claiming ? "Updating…" : "Logout Now"}
             </button>
           )}
 
           {/* Done state */}
-          {attendanceStat === "done" && (
+          {attendanceStat === "done" || attendanceStat === "logout" && (
             <span>All attendance marked for today</span>
           )}
 
