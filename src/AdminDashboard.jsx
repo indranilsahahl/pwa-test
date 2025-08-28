@@ -1,4 +1,4 @@
-// AdminDashboar.jsx 
+//✅  AdminDashboar.jsx 
 import React, { useMemo, useState, useEffect } from "react";
 import { fetchPending, approveAttendance, rejectAttendance } from "./api.js";
 
@@ -94,6 +94,11 @@ export default function AdminDashboard({reloadTrigger}) {
           </tbody>
         </table>
       </section>
+      
+      <section className="gb-card">
+      
+      </section>
+      
       
       <section className="gb-card">
       <h2>Pending Log</h2>

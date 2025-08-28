@@ -1,4 +1,4 @@
-// ✅ api.js
+//✅ api.js
 const API_BASE = "https://eyespace.co.in/gberp/hr/attendance.php";
 
 
@@ -176,3 +176,54 @@ export async function rejectAttendance(empId, which_date) {
 
   return await safeJson(response); // expected { success: true, message: "Rejected" }
 }
+
+// For getAdmins
+// --- Fetch list of admins ---
+export async function getAdmins() {
+  const formData = new FormData();
+  formData.append("action", "getAdmins");
+
+  const response = await fetch(API_BASE, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Network error: ${response.status}`);
+  }
+
+  return await safeJson(response); // expected array of { name, mobile }
+}
+
+// OTP Calls 
+const API_KEY = "fcca087b-6144-11f0-a562-0200cd936042"; // 2Factor API key
+const BASE_URL = "https://2factor.in/API/V1";
+
+export async function sendOtp(mobile) {
+  const url = `${BASE_URL}/${API_KEY}/SMS/${mobile}/AUTOGEN/OTP1`;
+
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Network error while sending OTP");
+
+  const result = await response.json();
+  if (result.Status !== "Success") {
+    throw new Error(result.Details || "Failed to send OTP");
+  }
+
+  return result.Details; // ✅ sessionId
+}
+
+export async function verifyOtp(sessionId, otp) {
+  const url = `${BASE_URL}/${API_KEY}/SMS/VERIFY/${sessionId}/${otp}`;
+
+  const response = await fetch(url);
+  if (!response.ok) throw new Error("Network error while verifying OTP");
+
+  const result = await response.json();
+  if (result.Status !== "Success") {
+    throw new Error(result.Details || "Invalid OTP");
+  }
+
+  return true; // ✅ OTP verified
+}
+
