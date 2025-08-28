@@ -97,8 +97,7 @@ button:focus-visible {
   align-items: center;        /* center horizontally */
   justify-content: flex-start; /* keep them at the top */
   min-height: 100vh;          /* full page height */
-  padding-top: 0px;          /* optional: spacing from very top */
-  z-index: 100;
+  gap:10px;
 }
 #u_logo {margin:auto 10px auto 0px; padding:0px;}
 .login_card {

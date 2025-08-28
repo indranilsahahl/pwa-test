@@ -108,7 +108,7 @@ function LoginPage() {
       </table>
 
       {/* Welcome text */}
-      <div className="gb_font_1 gb_center">
+      <div className="gb_font_1 gb_center gb_lightyellow1">
         Welcome to Attendance System. <br />
         <ul>
           <li>Eye Space employees only! </li>
@@ -125,7 +125,7 @@ function LoginPage() {
         <table className="gb_table_1 gb_tb_border_all gb_center">
           <tbody>
             <tr className="gb_tb_border_all">
-              <th className="gb_tb_border_all gb-black">Employee login</th>
+              <th className="gb_tb_border_all gb_blue">Employee login</th>
             </tr>
             <tr className="gb_box_1 gb_tb_border_all">
               <th className="gb_box_1 gb_tb_border_all">
@@ -169,7 +169,7 @@ function LoginPage() {
         <table className="gb_table_1 gb_tb_border_all gb_center">
           <thead>
             <tr>
-              <th colSpan="2">
+              <th colSpan="2" className="gb_green">
                 Device Status
               </th>
             </tr>

@@ -91,7 +91,7 @@ export default function AdminDashboard({reloadTrigger}) {
                 <h1 className="gb-title gb_blue gb_hover_blue">
                   Admin Dashboard
                 </h1>
-                <button className="gb-btn danger" onClick={onLogout}>
+                <button className="gb_btn_red" onClick={onLogout}>
                   Logout
                 </button>
               </td>
@@ -138,9 +138,9 @@ export default function AdminDashboard({reloadTrigger}) {
            	{/* Approve / Reject row */}
       	<tr>
         <td colSpan={3} className="text-center">
-          <button className="gb-btn success mr-2" onClick={() =>
+          <button className="gb_btn_mediumseagreen" onClick={() =>
                           handleApprove(row.empid, row.which_date)}> Approve </button>
-          <button className="gb-btn danger" onClick={() =>
+          <button className="gb_btn_red" onClick={() =>
                           handleReject(row.empid, row.which_date)}>  Reject </button>
         </td>
         </tr>
