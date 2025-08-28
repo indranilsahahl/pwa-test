@@ -21,7 +21,7 @@ export default function AdminDashboard({reloadTrigger}) {
     const pendingLogs = async () => {
       try {
         const data = await fetchPending();
-        console.log("Data = " + data);
+        // console.log("Data = " + data);
         setPendingStatus(data);
       } catch (err) {
         console.error("Failed to load Pending logs:", err);
