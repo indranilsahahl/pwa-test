@@ -31,7 +31,8 @@ export default function AdminDashboard(reloadTrigger) {
       }
     };
   }, [reloadTrigger]);
-
+  const [logTick, setLogTick] = useState(0);
+  
   // --- render ---
   return (
     <div className="dashboard-container">
@@ -76,7 +77,7 @@ export default function AdminDashboard(reloadTrigger) {
             </tr>
           </thead>
           <tbody>
-            {logs.map((row) => (
+            {pendingStatus.map((row) => (
               <React.Fragment key={row.which_date}>
                 {/* Date row */}
                 <tr>
