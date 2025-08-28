@@ -33,7 +33,7 @@ function LoginPage() {
           setLocation({
             lat: pos.coords.latitude,
             lon: pos.coords.longitude,
-            accuracy: pos.coords.accuracy,
+            accuracy: Math.round(pos.coords.accuracy),
           }),
         (err) => setLocation({ error: err.message }),
         {
