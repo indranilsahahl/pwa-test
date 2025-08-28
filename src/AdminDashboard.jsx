@@ -1,28 +1,42 @@
-// ✅ Daashboard.jsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./custom.css";
 
 export default function AdminDashboard() {
+  const navigate = useNavigate();
+
+  // --- State hooks ---
+  const [claiming, setClaiming] = useState(false);
+  const [attendanceStatus, setAttendanceStatus] = useState("");
+
   // --- session data snapshot ---
   const sessionData = useMemo(() => {
-   // --- derived values ---
+    // Example: extract session info from sessionStorage
+    return [
+      ["Employee ID", sessionStorage.getItem("empl_id")],
+      ["Name", sessionStorage.getItem("Emp_name")]
+    ];
+  }, []);
+
+  const empId = sessionData.find(([lbl]) => lbl === "Employee ID")?.[1];
+
+  // --- logout handler ---
   const onLogout = () => {
     sessionStorage.clear();
     navigate("/");
   };
-  const empId = sessionData.find(([lbl]) => lbl === "Employee ID")?.[1];
 
   // --- API helper ---
   const callApi = async (fn, ...args) => {
-  setClaiming(true);
-  try {
-    const res = await fn(...args);
-    setAttendanceStatus(res?.now_stat ?? "");
+    setClaiming(true);
+    try {
+      const res = await fn(...args);
+      setAttendanceStatus(res?.now_stat ?? "");
     } catch (err) {
-    		setAttendanceStatus("Error: " + err.message);
-        } finally {
-    	setClaiming(false);
-  	}
+      setAttendanceStatus("Error: " + err.message);
+    } finally {
+      setClaiming(false);
+    }
   };
 
   // --- render ---
@@ -40,7 +54,9 @@ export default function AdminDashboard() {
                 />
               </td>
               <td>
-                <h1 className="gb-title gb_blue .gb_hover_blue">Admin Dashboard</h1>
+                <h1 className="gb-title gb_blue gb_hover_blue">
+                  Admin Dashboard
+                </h1>
                 <button className="gb-btn danger" onClick={onLogout}>
                   Logout
                 </button>
@@ -52,4 +68,3 @@ export default function AdminDashboard() {
     </div>
   );
 }
-
