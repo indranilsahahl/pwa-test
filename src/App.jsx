@@ -169,9 +169,8 @@ function LoginPage() {
         <table className="gb_table_1 gb_tb_border_all gb_center">
             <thead>
             <tr className="gb_btn_goldenrod">
-              <th colSpan="2" className="gb_btn_goldenrod">
-                Device Status
-              </th>
+              <th className="gb_btn_goldenrod">  Device Status </th>
+              <th className="gb_btn_goldenrod">  &nbsp;&nbsp;&nbsp;&nbsp; </th>
             </tr>
             </thead>
             <tbody>
