@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { getAdmins, sendOtp, verifyOtp } from "./api.js";
 
-export default function AdminVerification() {
+export default function AdminVerification({ onVerified }) {
   const [admins, setAdmins] = useState([]);
   const [selectedAdmin, setSelectedAdmin] = useState("");
   const [sessionId, setSessionId] = useState("");
@@ -44,6 +44,8 @@ export default function AdminVerification() {
     try {
       await verifyOtp(sessionId, otp);
       setMessage("OTP Verified ✅");
+      
+      if (onVerified) onVerified();
     } catch (err) {
       setMessage(err.message);
     }
@@ -54,7 +56,7 @@ export default function AdminVerification() {
       <h2 className="font-bold text-lg">Admin Verification</h2>
 
       <select
-        className="border p-2 rounded w-full"
+        className="gb-custom-select"
         value={selectedAdmin}
         onChange={(e) => setSelectedAdmin(e.target.value)}
       >
@@ -65,10 +67,10 @@ export default function AdminVerification() {
           </option>
         ))}
       </select>
-
+       &nbsp;&nbsp;
       <button
         onClick={handleDone}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
+        className="gb_btn_1 gb_btn_menu_blue"
       >
         Done
       </button>
@@ -78,13 +80,13 @@ export default function AdminVerification() {
           <input
             type="text"
             placeholder="Enter OTP"
-            className="border p-2 rounded w-full gb_box_1 gb_lightslategray"
+            className=" gb_box_1 gb_lightslategray"
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
           />
           <button
             onClick={handleVerify}
-            className="gb_lightslategray text-white px-4 py-2 rounded"
+            className="gb_lightslategray"
           >
             Verify OTP
           </button>

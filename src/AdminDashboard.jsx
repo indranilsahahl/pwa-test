@@ -10,6 +10,7 @@ export default function AdminDashboard({reloadTrigger}) {
   const [claiming, setClaiming] = useState(false);
   const [pendingStatus, setPendingStatus] = useState([]);
   const [error, setError] = useState("");
+  const [otpVerified, setOtpVerified] = useState(false);
   const navigate = useNavigate();
   
   // --- logout handler ---
@@ -20,6 +21,8 @@ export default function AdminDashboard({reloadTrigger}) {
 
   // Fetch Pending Logs 
   useEffect(() => {
+    if (!otpVerified) return; // skip until verified
+    
     const pendingLogs = async () => {
       try {
         const data = await fetchPending();
@@ -32,7 +35,7 @@ export default function AdminDashboard({reloadTrigger}) {
     };
     
     pendingLogs(); // ✅ call it here
-  }, [reloadTrigger]);
+  }, [reloadTrigger, otpVerified]);
   // DateFormat From DD-MM-YYYY to ISO
   function formatDateForBackend( ddmmyyyy ) {
   	const [dd, mm, yyyy] = ddmmyyyy.split("/");
@@ -96,11 +99,11 @@ export default function AdminDashboard({reloadTrigger}) {
           </tbody>
         </table>
       </section>
-       <AdminVerification />      
-      <section className="gb-card">
-      <h2>Pending Log</h2>
-
-      {error && <div className="text-red-600">{error}</div>}
+       <AdminVerification onVerified={() => setOtpVerified(true)} />     
+      {otpVerified && (
+      	<section className="gb-card">
+     	 <h2>Pending Log</h2>
+	 {error && <div className="text-red-600">{error}</div>}
 
       {pendingStatus.length === 0 ? (
         <div>No logs found</div>
@@ -147,6 +150,7 @@ export default function AdminDashboard({reloadTrigger}) {
         </table>
       )}
     </section>
+    )}
     </div>
   );
 }
