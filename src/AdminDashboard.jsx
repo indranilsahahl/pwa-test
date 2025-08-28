@@ -83,7 +83,7 @@ export default function AdminDashboard(reloadTrigger) {
           </thead>
           <tbody>
             {pendingStatus.map((row) => (
-              <React.Fragment key={row.which_date}>
+              <React.Fragment key={`${row.which_date}-${row.empid}`}>
                 {/* Date row */}
                 <tr>
                   <th colSpan={3} className="bg-gray-200 text-left font-bold">
