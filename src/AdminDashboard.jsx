@@ -1,5 +1,6 @@
 //✅  AdminDashboard.jsx 
 import React, { useMemo, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { fetchPending, approveAttendance, rejectAttendance } from "./api.js";
 import AdminVerification from "./AdminVerification";
 import "./custom.css";
