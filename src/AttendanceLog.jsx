@@ -49,7 +49,7 @@ export default function AttendanceLog({ empId, reloadTrigger  }) {
                 {/* Date row */}
                 <tr>
                   <th colSpan={3} className="bg-gray-200 text-left font-bold">
-                    {formatDate(row.which_date)}
+                    {formatDate(row.which_date)} - {row.attendance_stat}
                   </th>
                 </tr>
 
