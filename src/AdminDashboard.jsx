@@ -30,6 +30,8 @@ export default function AdminDashboard(reloadTrigger) {
         setError("Unable to load pending logs.");
       }
     };
+    
+    pendingLogs(); // ✅ call it here
   }, [reloadTrigger]);
   const [logTick, setLogTick] = useState(0);
   useEffect(() => {
