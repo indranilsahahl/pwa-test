@@ -168,7 +168,7 @@ function LoginPage() {
       <div className="gb_center login_card" style={{ marginTop: "20px" }}>
         <table className="gb_table_1 gb_tb_border_all gb_center">
             <thead>
-            <tr className="gb_btn_goldenrod>
+            <tr className="gb_btn_goldenrod">
               <th colSpan="2" className="gb_btn_goldenrod">
                 Device Status
               </th>
