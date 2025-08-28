@@ -66,7 +66,7 @@ function LoginPage() {
 	sessionStorage.setItem("home_branch", data.home_branch);
 
 	if (data.Stat === "OK") {
-		if( empId === 2025 ) {
+		if( empId === "2025" ) {
 			navigate("/AdminDashboard");
 		} else {
 			navigate("/dashboard");
