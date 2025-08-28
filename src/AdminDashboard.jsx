@@ -10,6 +10,7 @@ export default function AdminDashboard(reloadTrigger) {
   // --- State hooks ---
   const [claiming, setClaiming] = useState(false);
   const [pendingStatus, setPendingStatus] = useState("");
+  const [error, setError] = useState("");
 
   // --- logout handler ---
   const onLogout = () => {
