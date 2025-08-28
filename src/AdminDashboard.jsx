@@ -1,5 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { fetchPending } from "./api.js";
+
 import "./custom.css";
 
 export default function AdminDashboard() {
@@ -7,18 +9,7 @@ export default function AdminDashboard() {
 
   // --- State hooks ---
   const [claiming, setClaiming] = useState(false);
-  const [attendanceStatus, setAttendanceStatus] = useState("");
-
-  // --- session data snapshot ---
-  const sessionData = useMemo(() => {
-    // Example: extract session info from sessionStorage
-    return [
-      ["Employee ID", sessionStorage.getItem("empl_id")],
-      ["Name", sessionStorage.getItem("Emp_name")]
-    ];
-  }, []);
-
-  const empId = sessionData.find(([lbl]) => lbl === "Employee ID")?.[1];
+  const [pendingStatus, setPendingStatus] = useState("");
 
   // --- logout handler ---
   const onLogout = () => {
@@ -27,17 +18,17 @@ export default function AdminDashboard() {
   };
 
   // --- API helper ---
-  const callApi = async (fn, ...args) => {
-    setClaiming(true);
-    try {
-      const res = await fn(...args);
-      setAttendanceStatus(res?.now_stat ?? "");
-    } catch (err) {
-      setAttendanceStatus("Error: " + err.message);
-    } finally {
-      setClaiming(false);
-    }
-  };
+  useEffect(() => {
+    const pendingLogs = async () => {
+      try {
+        const data = await fetchPending();
+        setPendingStatus(data);
+      } catch (err) {
+        console.error("Failed to load Pending logs:", err);
+        setError("Unable to load pending logs.");
+      }
+    };
+  }, [reloadTrigger]);
 
   // --- render ---
   return (
@@ -65,6 +56,47 @@ export default function AdminDashboard() {
           </tbody>
         </table>
       </section>
+      
+      <section className="gb-card">
+      <h2>Pending Log</h2>
+
+      {error && <div className="text-red-600">{error}</div>}
+
+      {pendingStatus.length === 0 ? (
+        <div>No logs found</div>
+      ) : (
+        <table className="gb-table">
+          <thead>
+            <tr>
+              <th>Time</th>
+              <th>Error</th>
+              <th>Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            {logs.map((row) => (
+              <React.Fragment key={row.which_date}>
+                {/* Date row */}
+                <tr>
+                  <th colSpan={3} className="bg-gray-200 text-left font-bold">
+                    {row.dt} - {row.empid} - {row.e_name} 
+                  </th>
+                </tr>
+
+                {/* Entry rows */}
+                {row.entries.map((entry, i) => (
+                  <tr key={i}>
+                    <td className="pl-6">{entry.time || "-"}</td>
+                    <td>{entry.error || "-"}</td>
+                    <td className="italic text-gray-600">{entry.type}</td>
+                  </tr>
+                ))}
+              </React.Fragment>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </section>
     </div>
   );
 }

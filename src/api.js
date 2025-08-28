@@ -120,3 +120,20 @@ export async function fetchLogs(empId) {
   const json = await safeJson(response); // expected array of logs
   return json;
 }
+
+export async function fetchPending() {
+  const formData = new FormData();
+  formData.append("action", "getPendingAttendance");
+
+  const response = await fetch(API_BASE, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Network error");
+  }
+
+  const json = await safeJson(response); // expected array of logs
+  return json;
+}
