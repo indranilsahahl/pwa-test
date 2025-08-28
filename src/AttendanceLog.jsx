@@ -49,7 +49,7 @@ export default function AttendanceLog({ empId, reloadTrigger  }) {
               <React.Fragment key={row.which_date}>
                 {/* Date row */}
                 <tr>
-                  <th colSpan={3} className={`${row.attendance_stat} text-left font-bold`}>
+                  <th colSpan={3} className={`${row.attendance_stat} gb-black`}>
                     {formatDate(row.which_date)} - {row.attendance_stat}
                   </th>
                 </tr>
