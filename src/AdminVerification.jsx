@@ -80,6 +80,7 @@ export default function AdminVerification() {
             placeholder="Enter OTP"
             className="border p-2 rounded w-full"
             value={otp}
+            className="gb_box_1"
             onChange={(e) => setOtp(e.target.value)}
           />
           <button
