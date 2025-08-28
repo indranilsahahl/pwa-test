@@ -4,7 +4,7 @@ import { fetchPending } from "./api.js";
 
 import "./custom.css";
 
-export default function AdminDashboard() {
+export default function AdminDashboard(reloadTrigger) {
   const navigate = useNavigate();
 
   // --- State hooks ---
