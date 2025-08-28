@@ -1,7 +1,7 @@
-//✅  AdminDashboar.jsx 
+//✅  AdminDashboard.jsx 
 import React, { useMemo, useState, useEffect } from "react";
 import { fetchPending, approveAttendance, rejectAttendance } from "./api.js";
-
+import AdminVerification from "./AdminVerification";
 import "./custom.css";
 
 export default function AdminDashboard({reloadTrigger}) {
@@ -94,10 +94,7 @@ export default function AdminDashboard({reloadTrigger}) {
           </tbody>
         </table>
       </section>
-      
-      <AdminVerification />
-      
-      
+       <AdminVerification />      
       <section className="gb-card">
       <h2>Pending Log</h2>
 
