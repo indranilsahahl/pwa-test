@@ -32,7 +32,7 @@ export default function AdminDashboard(reloadTrigger) {
     };
   }, [reloadTrigger]);
   const [logTick, setLogTick] = useState(0);
-  
+  setLogTick((t) => t + 1); // trigger Pending to reload
   // --- render ---
   return (
     <div className="dashboard-container">
