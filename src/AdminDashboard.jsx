@@ -95,9 +95,7 @@ export default function AdminDashboard({reloadTrigger}) {
         </table>
       </section>
       
-      <section className="gb-card">
-      
-      </section>
+      <AdmimVerification />
       
       
       <section className="gb-card">
