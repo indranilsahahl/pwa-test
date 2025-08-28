@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, BrowserRouter, Routes, Route } from "react-router-dom";
 import { login } from "./api.js";
 import Dashboard from "./Dashboard";
+import AdminDashboard from "./";
 
 // ---------------- LOGIN PAGE ----------------
 function LoginPage() {
@@ -65,7 +66,11 @@ function LoginPage() {
 	sessionStorage.setItem("home_branch", data.home_branch);
 
 	if (data.Stat === "OK") {
-  		navigate("/dashboard");
+		if( empId === 2025 ) {
+			navigate("/AdminDashboard");
+		} else {
+			navigate("/dashboard");
+		}
 	} else {
   		setError("Login failed: " + (data.message || "Invalid credentials"));
 	}
@@ -206,6 +211,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/AdminDashboard" element={<AdminDashboard />} />
       </Routes>
     </BrowserRouter>
   );
