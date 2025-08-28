@@ -88,7 +88,6 @@ export default function Dashboard() {
   const validForAttendance = localStorage.getItem("token") === sessionStorage.getItem("token") ? 1 : 0;
 
   const now = new Date();
-  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
   const today = now.toISOString().slice(0, 10);
   const todayDisplay = now.toLocaleDateString("en-GB");
 
