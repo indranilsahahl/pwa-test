@@ -172,7 +172,7 @@ function LoginPage() {
               <th className="gb_btn_goldenrod">  Device Status </th>
               <th className="gb_btn_goldenrod">  &nbsp;&nbsp;&nbsp;&nbsp;
               &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
-              &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;;
                </th>
             </tr>
             </thead>
