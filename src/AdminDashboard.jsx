@@ -87,7 +87,7 @@ export default function AdminDashboard(reloadTrigger) {
                 {/* Date row */}
                 <tr>
                   <th colSpan={3} className="bg-gray-200 text-left font-bold">
-                    {row.dt} - {row.empid} - {row.e_name} 
+                    {row.which_date} - {row.empid} - {row.empname} 
                   </th>
                 </tr>
 
