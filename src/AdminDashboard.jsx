@@ -10,7 +10,8 @@ export default function AdminDashboard({reloadTrigger}) {
   const [claiming, setClaiming] = useState(false);
   const [pendingStatus, setPendingStatus] = useState([]);
   const [error, setError] = useState("");
-
+  const navigate = useNavigate();
+  
   // --- logout handler ---
   const onLogout = () => {
     sessionStorage.clear();
