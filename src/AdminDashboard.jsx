@@ -35,7 +35,7 @@ export default function AdminDashboard({reloadTrigger}) {
     pendingLogs(); // ✅ call it here
   }, [reloadTrigger]);
   // DateFormat From DD-MM-YYYY to ISO
-  function formatDateForBackend = (ddmmyyyy) {
+  function formatDateForBackend( ddmmyyyy ) {
   	const [dd, mm, yyyy] = ddmmyyyy.split("/");
   	return `${yyyy}-${mm}-${dd}`; // "yyyy-mm-dd"
   };
