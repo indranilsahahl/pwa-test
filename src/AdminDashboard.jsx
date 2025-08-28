@@ -1,13 +1,10 @@
 // AdminDashboar.jsx 
 import React, { useMemo, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { fetchPending, approveAttendance, rejectAttendance } from "./api.js";
 
 import "./custom.css";
 
 export default function AdminDashboard({reloadTrigger}) {
-  const navigate = useNavigate();
-
   // --- State hooks ---
   const [claiming, setClaiming] = useState(false);
   const [pendingStatus, setPendingStatus] = useState([]);
