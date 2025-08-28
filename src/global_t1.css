@@ -142,4 +142,8 @@ select:invalid{box-shadow:none}
 .gb_btn_goldenrod{color:#000; background-color:rgba(218, 165, 32, .3);} .gb_btn_goldenrod:hover{color:#fff; background-color:#daa520;}
 .gb_btn_crimson:disabled,.gb_btn_mediumseagreen:disabled,.gb_btn_menu_blue:disabled,.gb_btn_red:disabled,.gb_btn_olivedarb:disabled,
 .gb_btn_royalblue:disabled,.gb_btn_goldenrod:disabled{color:#999;background:inherit;}
-
+.gb_wrap {
+  word-wrap: break-word; /* Legacy */
+  overflow-wrap: break-word; /* Modern */
+}
+.gb_90 { width: 90%; }
