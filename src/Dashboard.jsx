@@ -233,7 +233,7 @@ export default function Dashboard() {
           </table>
         )}
         <div className="gb-footer">
-          These values are read live from <span className="gb-badge">sessionStorage</span>.
+          These values are from last <span className="gb-badge">Login</span>.
         </div>
       </section>
 

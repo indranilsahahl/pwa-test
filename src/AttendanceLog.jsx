@@ -1,6 +1,7 @@
 // ✅ AttendanceLog.jsx
 import React, { useEffect, useState } from "react";
 import { fetchLogs } from "./api.js";
+import "./index.css"
 
 function formatDate(dateStr) {
   if (!dateStr) return "";
@@ -48,7 +49,7 @@ export default function AttendanceLog({ empId, reloadTrigger  }) {
               <React.Fragment key={row.which_date}>
                 {/* Date row */}
                 <tr>
-                  <th colSpan={3} className="bg-gray-200 text-left font-bold">
+                  <th colSpan={3} className={`${row.attendance_stat} text-left font-bold`}>
                     {formatDate(row.which_date)} - {row.attendance_stat}
                   </th>
                 </tr>
