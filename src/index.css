@@ -121,3 +121,15 @@ button:focus-visible {
 .gb-black {
   color: black;		
 }
+.Rejected { 
+  background: #DC3D29;
+  color: black;
+}
+.Approved {
+  background:#29DC89;
+  color: black;
+}
+.Pending {
+  background:#808080;
+  color: black;
+}
