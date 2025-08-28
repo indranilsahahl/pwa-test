@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, BrowserRouter, Routes, Route } from "react-router-dom";
 import { login } from "./api.js";
 import Dashboard from "./Dashboard";
-import AdminDashboard from "./";
+import AdminDashboard from "./AdminDashboard";
 
 // ---------------- LOGIN PAGE ----------------
 function LoginPage() {
