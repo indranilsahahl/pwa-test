@@ -167,11 +167,14 @@ function LoginPage() {
       {/* ✅ Device Status */}
       <div className="gb_center login_card" style={{ marginTop: "20px" }}>
         <table className="gb_table_1 gb_tb_border_all gb_center">
-            <tr>
+            <thead>
+            <tr className="gb_btn_goldenrod>
               <th colSpan="2" className="gb_btn_goldenrod">
                 Device Status
               </th>
             </tr>
+            </thead>
+            <tbody>
             <tr>
               <td className="gb_tb_border_all gb-black">Device Token</td>
               <td className="gb_tb_border_all gb-black">{tokenStatus}</td>
@@ -194,6 +197,7 @@ function LoginPage() {
                 {location?.accuracy ?? location?.error ?? "Loading..."}
               </td>
             </tr>
+            </tbody>
         </table>
       </div>
 
