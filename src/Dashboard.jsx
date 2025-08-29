@@ -48,7 +48,18 @@ export default function Dashboard() {
     window.addEventListener("storage", onStorage);
     return () => window.removeEventListener("storage", onStorage);
   }, []);
+  // --- Handle Android / browser back button ---
+  useEffect(() => {
+    const handleBackButton = (event) => {
+      event.preventDefault();
+      sessionStorage.clear();
+      navigate("/", { replace: true });
+    };
 
+    window.addEventListener("popstate", handleBackButton);
+    return () => window.removeEventListener("popstate", handleBackButton);
+  }, [navigate]);
+  	
   // --- geolocation watch with cleanup ---
   useEffect(() => {
     if (!("geolocation" in navigator)) {
