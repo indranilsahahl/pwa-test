@@ -4,6 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { fetchPending, approveAttendance, rejectAttendance } from "./api.js";
 import AdminVerification from "./AdminVerification";
 import "./custom.css";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+
+const MySwal = withReactContent(Swal);
+
 
 export default function AdminDashboard({reloadTrigger}) {
   // --- State hooks ---
@@ -42,36 +47,73 @@ export default function AdminDashboard({reloadTrigger}) {
   	return `${yyyy}-${mm}-${dd}`; // "yyyy-mm-dd"
   };
   
-  // Approve handler
-  const handleApprove = async (empid, which_date) => {
-    try {
-      const backendDate = formatDateForBackend(which_date);
-      await approveAttendance(empid, backendDate);
-      setPendingStatus((prev) =>
-        prev.filter(
-          (r) => !(r.empid === empid && r.which_date === which_date)
-        )
-      );
-    } catch (err) {
-      console.error("Approve failed", err);
-    }
-  };
   
-  // Reject handler
-  const handleReject = async (empid, which_date) => {
-    try {
-      const backendDate = formatDateForBackend(which_date);
-      await rejectAttendance(empid, backendDate);
-      setPendingStatus((prev) =>
-        prev.filter(
-          (r) => !(r.empid === empid && r.which_date === which_date)
-        )
-      );
-    } catch (err) {
-      console.error("Reject failed", err);
-    }
-  };
   
+// Generic confirm action for approve/reject (or future actions)
+const confirmAction = (empid, which_date, actionType) => {
+  const actionText = actionType === "approve" ? "Approve" : "Reject";
+  const actionIcon = actionType === "approve" ? "question" : "warning";
+  const backendFunc = actionType === "approve" ? approveAttendance : rejectAttendance;
+
+  showConfirmDialog({
+    title: `${actionText} Attendance?`,
+    text: `Do you want to ${actionText.toLowerCase()} attendance for ${empid} on ${which_date}?`,
+    confirmText: `Yes, ${actionText}`,
+    icon: actionIcon,
+    onConfirm: async () => {
+      try {
+        const backendDate = formatDateForBackend(which_date);
+        await backendFunc(empid, backendDate);
+        setPendingStatus((prev) =>
+          prev.filter((r) => !(r.empid === empid && r.which_date === which_date))
+        );
+        await MySwal.fire({
+          icon: "success",
+          title: `${actionText}d!`,
+          text: `Attendance has been ${actionText.toLowerCase()}d.`,
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      } catch (err) {
+        console.error(`${actionText} failed`, err);
+        await MySwal.fire({
+          icon: "error",
+          title: "Failed!",
+          text: `${actionText} failed. Try again.`,
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      }
+    },
+  });
+};
+
+// Generic SweetAlert2 confirm dialog
+const showConfirmDialog = async ({ title, text, confirmText, icon = "question", onConfirm }) => {
+  const res = await MySwal.fire({
+    title,
+    text,
+    icon,
+    showCancelButton: true,
+    confirmButtonText: confirmText,
+    cancelButtonText: "Cancel",
+    customClass: {
+      popup: "rounded-2xl shadow-xl p-6 bg-white",
+      title: "text-xl font-semibold text-gray-800",
+      htmlContainer: "text-gray-600 text-base",
+      confirmButton:
+        "bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg shadow-md",
+      cancelButton:
+        "bg-gray-300 hover:bg-gray-400 text-black font-medium px-4 py-2 rounded-lg shadow-md ml-2",
+    },
+    buttonsStyling: false,
+  });
+
+  if (res.isConfirmed && typeof onConfirm === "function") {
+    await onConfirm();
+  }
+};
+
   
   // --- render ---
   return (
