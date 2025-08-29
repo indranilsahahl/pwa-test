@@ -86,7 +86,7 @@ function LoginPage() {
 
 
   return (
-    <div id="top_level">
+    <div class="mt-8 rounded-lg shadow-lg flex flex-col items-center justify-start min-h-screen gap-2">
       {/* Logo */}
       <table className="logo_txt">
         <tbody>
