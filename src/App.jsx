@@ -111,12 +111,12 @@ function LoginPage() {
       <div className="text-sm font-sans text-center bg-yellow-100 w-[90%] rounded-xl text-black flex flex-wrap">
         Welcome to Attendance System. <br />
         <ul>
-          <li>Eye Space employees only! </li>
-          <li>Your employee ID is userid</li>
-          <li>Password hint - contact HO</li>
-          <li>You can register your device for attendance.</li>
-          <li>Only 1 device for an employee Can be registered</li>
-          <li>For Re-registration/Update device, contact HO</li>
+          <li className="marker:text-blue-500">Eye Space employees only! </li>
+          <li className="marker:text-blue-500">Your employee ID is userid</li>
+          <li className="marker:text-blue-500">Password hint - contact HO</li>
+          <li className="marker:text-blue-500">You can register your device for attendance.</li>
+          <li className="marker:text-blue-500">Only 1 device for an employee Can be registered</li>
+          <li className="marker:text-blue-500">For Re-registration/Update device, contact HO</li>
         </ul>
       </div>
 
