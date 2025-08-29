@@ -1,6 +1,7 @@
 // ✅ AttendanceEntry.jsx
 import React from "react";
 import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
 
 export default function AttendanceEntry({
   validForAttendance, todayDisplay,  attendanceStat, claiming,  
@@ -8,10 +9,6 @@ export default function AttendanceEntry({
 }) {
  	// Wrapper functions for confirm dialogs
  	const MySwal = withReactContent(Swal);
-
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
-
 const MySwal = withReactContent(Swal);
 
 // ---- Default theme config ----
