@@ -190,7 +190,7 @@ export default function Dashboard() {
 
   // --- render ---
   return (
-    <div className="dashboard-container">
+    <div className="absolute top-0 left-0 w-full p-4 rounded-xl flex flex-col gap-2 bg-[linear-gradient(to_top,rgba(69,192,174,1),rgba(69,192,174,0.2))]">
       <section className="gb-card">
         <table className="logo_txt">
           <tbody>
