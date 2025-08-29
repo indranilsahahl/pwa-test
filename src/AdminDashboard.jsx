@@ -112,6 +112,23 @@ const showConfirmDialog = async ({ title, text, confirmText, icon = "question", 
   if (res.isConfirmed && typeof onConfirm === "function") {
     await onConfirm();
   }
+  
+  // Listen for back button / browser navigation
+    const handleBackButton = (event) => {
+      event.preventDefault();
+      // Trigger logout
+      sessionStorage.clear();
+      // Optionally navigate to login page
+      navigate("/", { replace: true });
+    };
+
+    window.addEventListener("popstate", handleBackButton);
+
+    return () => {
+      window.removeEventListener("popstate", handleBackButton);
+    };
+  }, [navigate]);
+
 };
 
   
