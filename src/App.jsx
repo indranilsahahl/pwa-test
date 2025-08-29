@@ -108,7 +108,7 @@ function LoginPage() {
       </table>
 
       {/* Welcome text */}
-      <div className="text-sm font-sans text-center bg-yellow-100 w-[90%] rounded-xl text-black flex flex-wrap">
+      <div className="text-sm font-sans bg-yellow-100 w-[90%] rounded-xl text-black flex flex-wrap">
         Welcome to Attendance System. <br />
         <ul className="list-disc pl-5">
           <li className="marker:text-blue-500">Eye Space employees only! </li>
