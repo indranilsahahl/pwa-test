@@ -88,7 +88,7 @@ export default function Dashboard() {
   const validForAttendance = localStorage.getItem("token") === sessionStorage.getItem("token") ? 1 : 0;
 
   const now = new Date();
-  const today = now.toISOString().slice(0, 10);
+  const today = now.toLocaleDateString("en-CA"); // ISO style but local tz
   const todayDisplay = now.toLocaleDateString("en-GB");
 
   const [attendanceStat, setAttendanceStatus] = useState("");
