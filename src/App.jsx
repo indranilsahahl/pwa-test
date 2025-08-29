@@ -93,7 +93,7 @@ function LoginPage() {
           <tr>
             <td>
               <img
-                id="u_logo"
+                className="mr-2 rounded"
                 src="https://eyespace.co.in/gberp/images/sysimages/eyespace_logo_36x32.png"
                 alt="Eye Space Logo"
               />
