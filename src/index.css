@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply min-h-screen bg-[linear-gradient(to_top,rgba(69,192,174,1),rgba(69,192,174,0.2))];
+    @apply bg-app-gradient bg-cover;
 }
 
 :root {
