@@ -175,7 +175,7 @@ function LoginPage() {
             <tbody>
             <tr>
               <td className="border border-solid text-black border-blue-500">Device Token</td>
-              <td className="border border-solid text-black">{tokenStatus}</td>
+              <td className="border border-solid text-black border-blue-500">{tokenStatus}</td>
             </tr>
             <tr>
               <td className="border border-solid border-blue-500 text-black">Latitude</td>
@@ -189,7 +189,7 @@ function LoginPage() {
                 {location?.lon ?? location?.error ?? "Loading..."}
               </td>
             </tr>
-            <tr>
+            <tr className="border border-solid text-black border-blue-500">
               <td className="border border-solid text-black border-blue-500">Accuracy (m)</td>
               <td className="border border-solid text-black border-blue-500">
                 {location?.accuracy ?? location?.error ?? "Loading..."}
