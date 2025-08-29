@@ -180,10 +180,10 @@ const showConfirmDialog = async ({ title, text, confirmText, icon = "question", 
            	{/* Approve / Reject row */}
       	<tr>
         <td colSpan={3} className="text-center">
-          <button className="gb_btn_mediumseagreen" onClick={() =>
-                          handleApprove(row.empid, row.which_date)}> Approve </button>
-          <button className="gb_btn_red" onClick={() =>
-                          handleReject(row.empid, row.which_date)}>  Reject </button>
+          <button className="gb_btn_mediumseagreen" 
+          	onClick={() => confirmAction(empid, which_date, "approve")}> Approve </button>
+          <button className="gb_btn_red" 
+          	onClick={() => confirmAction(empid, which_date, "reject")}>  Reject </button>
         </td>
         </tr>
               </React.Fragment>
