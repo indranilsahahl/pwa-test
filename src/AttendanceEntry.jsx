@@ -2,16 +2,14 @@
 import React from "react";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
+const MySwal = withReactContent(Swal);
 
 export default function AttendanceEntry({
   validForAttendance, todayDisplay,  attendanceStat, claiming,  
   	handleAttendanceLogin, handleAttendanceLogout,
 }) {
  	// Wrapper functions for confirm dialogs
- 	const MySwal = withReactContent(Swal);
-const MySwal = withReactContent(Swal);
-
-// ---- Default theme config ----
+ // ---- Default theme config ----
 const baseOptions = {
   customClass: {
     popup: "rounded-2xl shadow-xl p-6 bg-white",
