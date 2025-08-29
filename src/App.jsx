@@ -110,7 +110,7 @@ function LoginPage() {
       {/* Welcome text */}
       <div className="text-sm font-sans text-center bg-yellow-100 w-[90%] rounded-xl text-black flex flex-wrap">
         Welcome to Attendance System. <br />
-        <ul>
+        <ul className="list-disc pl-5">
           <li className="marker:text-blue-500">Eye Space employees only! </li>
           <li className="marker:text-blue-500">Your employee ID is userid</li>
           <li className="marker:text-blue-500">Password hint - contact HO</li>
