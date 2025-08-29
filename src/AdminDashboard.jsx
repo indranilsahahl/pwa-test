@@ -130,6 +130,7 @@ const showConfirmDialog = async ({ title, text, confirmText, icon = "question", 
       window.removeEventListener("popstate", handleBackButton);
     };
   }, [navigate]);
+  };
 
 
   
