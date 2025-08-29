@@ -108,7 +108,7 @@ function LoginPage() {
       </table>
 
       {/* Welcome text */}
-      <div className="gb_font_1 gb_center gb_lightyellow1 gb_90 gb_wrap">
+      <div className="text-sm font-sans text-center bg-yellow-100 w-[90%] flex flex-wrap">
         Welcome to Attendance System. <br />
         <ul>
           <li>Eye Space employees only! </li>
@@ -122,13 +122,13 @@ function LoginPage() {
 
       {/* Login Form */}
       <form onSubmit={handleSubmit} className="gb_center login_card">
-        <table className="gb_table_1 gb_tb_border_all gb_center">
+        <table className="gb_table_1 border border-solid gb_center">
           <tbody>
-            <tr className="gb_tb_border_all">
-              <th className="gb_tb_border_all gb_blue">Employee login</th>
+            <tr className="border border-solid">
+              <th className="border border-solid gb_blue">Employee login</th>
             </tr>
-            <tr className="gb_box_1 gb_tb_border_all">
-              <th className="gb_box_1 gb_tb_border_all">
+            <tr className="gb_box_1 border border-solid">
+              <th className="gb_box_1 border border-solid">
                 <input
                   name="emp_id"
                   type="number"
@@ -140,8 +140,8 @@ function LoginPage() {
                 />
               </th>
             </tr>
-            <tr className="gb_tb_border_all">
-              <th className="gb_tb_border_all">
+            <tr className="border border-solid">
+              <th className="border border-solid">
                 <input
                   name="pass"
                   type="password"
@@ -153,8 +153,8 @@ function LoginPage() {
                 />
               </th>
             </tr>
-            <tr className="gb_box_1 gb_tb_border_all">
-              <th className="gb_box_1 gb_tb_border_all">
+            <tr className="gb_box_1 border border-solid">
+              <th className="gb_box_1 border border-solid">
                 <button type="submit" className="gb_btn_1 gb_btn_menu_blue">
                   Sign In
                 </button>
@@ -166,7 +166,7 @@ function LoginPage() {
 
       {/* ✅ Device Status */}
       <div className="gb_center login_card gb_90" style={{ marginTop: "20px" }}>
-        <table className="gb_table_1 gb_tb_border_all">
+        <table className="gb_table_1 border border-solid">
             <thead>
             <tr className="gb_btn_goldenrod">
               <th className="gb_btn_goldenrod" colspan="2">  Device Status </th>
@@ -174,24 +174,24 @@ function LoginPage() {
             </thead>
             <tbody>
             <tr>
-              <td className="gb_tb_border_all gb-black">Device Token</td>
-              <td className="gb_tb_border_all gb-black">{tokenStatus}</td>
+              <td className="border border-solid text-black">Device Token</td>
+              <td className="border border-solid text-black">{tokenStatus}</td>
             </tr>
             <tr>
-              <td className="gb_tb_border_all gb-black">Latitude</td>
-              <td className="gb_tb_border_all gb-black">
+              <td className="border border-solid text-black">Latitude</td>
+              <td className="border border-solid text-black">
                 {location?.lat ?? location?.error ?? "Loading..."}
               </td>
             </tr>
             <tr>
-              <td className="gb_tb_border_all gb-black">Longitude</td>
-              <td className="gb_tb_border_all gb-black">
+              <td className="border border-solid text-black">Longitude</td>
+              <td className="border border-solid text-black">
                 {location?.lon ?? location?.error ?? "Loading..."}
               </td>
             </tr>
             <tr>
-              <td className="gb_tb_border_all gb-black">Accuracy (m)</td>
-              <td className="gb_tb_border_all gb-black">
+              <td className="border border-solid text-black">Accuracy (m)</td>
+              <td className="border border-solid text-black">
                 {location?.accuracy ?? location?.error ?? "Loading..."}
               </td>
             </tr>

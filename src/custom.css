@@ -10,26 +10,6 @@
   --gb-danger: #dc2626;
 }
 
-.gb-container {
-  min-height: 100vh;
-  background: var(--gb-bg);
-  color: var(--gb-text);
-  padding: 24px;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-  display: flex;
-  flex-direction: column;
-  padding-top: 1.5rem;
-  gap: 1rem;
-}
-
-.gb-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-  margin-top: 20px;
-}
-
 .gb-btn {
   appearance: none;
   border: 1px solid var(--gb-border);
@@ -45,16 +25,6 @@
 
 .gb-btn.danger { border-color: rgba(220,38,38,0.3); color: #fecaca; }
 .gb-btn.danger:hover { background: rgba(220,38,38,0.12); border-color: rgba(220,38,38,0.6); }
-
-.gb-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-}
-
-@media (min-width: 880px) {
-  .gb-grid { grid-template-columns: 1fr 1fr; }
-}
 
 .gb-card {
   background: var(--gb-card);
