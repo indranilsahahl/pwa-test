@@ -113,7 +113,9 @@ const showConfirmDialog = async ({ title, text, confirmText, icon = "question", 
     await onConfirm();
   }
   
-  // Listen for back button / browser navigation
+};
+
+// Listen for back button / browser navigation
     const handleBackButton = (event) => {
       event.preventDefault();
       // Trigger logout
@@ -129,7 +131,6 @@ const showConfirmDialog = async ({ title, text, confirmText, icon = "question", 
     };
   }, [navigate]);
 
-};
 
   
   // --- render ---
