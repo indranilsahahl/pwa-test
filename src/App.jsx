@@ -168,30 +168,30 @@ function LoginPage() {
       <div className="gb_center login_card w-11/12 mt-5">
         <table className="gb_table_1 border border-solid border-blue-500">
             <thead>
-            <tr className="gb_btn_goldenrod">
-              <th className="gb_btn_goldenrod" colspan="2">  Device Status </th>
+            <tr className="gb_btn_goldenrod border border-solid border-blue-500">
+              <th className="gb_btn_goldenrod border border-solid border-blue-500" colspan="2">  Device Status </th>
             </tr>
             </thead>
             <tbody>
             <tr>
-              <td className="border border-solid text-black">Device Token</td>
+              <td className="border border-solid text-black border-blue-500">Device Token</td>
               <td className="border border-solid text-black">{tokenStatus}</td>
             </tr>
             <tr>
-              <td className="border border-solid text-black">Latitude</td>
-              <td className="border border-solid text-black">
+              <td className="border border-solid border-blue-500 text-black">Latitude</td>
+              <td className="border border-solid border-blue-500 text-black">
                 {location?.lat ?? location?.error ?? "Loading..."}
               </td>
             </tr>
             <tr>
-              <td className="border border-solid text-black">Longitude</td>
-              <td className="border border-solid text-black">
+              <td className="border border-solid text-black border-blue-500">Longitude</td>
+              <td className="border border-solid text-black border-blue-500">
                 {location?.lon ?? location?.error ?? "Loading..."}
               </td>
             </tr>
             <tr>
-              <td className="border border-solid text-black">Accuracy (m)</td>
-              <td className="border border-solid text-black">
+              <td className="border border-solid text-black border-blue-500">Accuracy (m)</td>
+              <td className="border border-solid text-black border-blue-500">
                 {location?.accuracy ?? location?.error ?? "Loading..."}
               </td>
             </tr>
