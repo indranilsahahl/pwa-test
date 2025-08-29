@@ -165,7 +165,7 @@ function LoginPage() {
       </form>
 
       {/* ✅ Device Status */}
-      <div className="gb_center login_card gb_90" style={{ marginTop: "20px" }}>
+      <div className="gb_center login_card w-11/12 mt-5">
         <table className="gb_table_1 border border-solid">
             <thead>
             <tr className="gb_btn_goldenrod">
