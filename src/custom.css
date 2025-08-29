@@ -97,6 +97,12 @@
   gap: 10px;
   flex: none;              /* Prevent growth/shrinkage */
   width: 100% !important;  /* Force full-width for each item */
+  /* 👇 Your gradient background */
+  background: linear-gradient(
+    to top,
+    rgba(69, 192, 174, 1),
+    rgba(69, 192, 174, 0.2)
+  );
 }
 
 /* Ensure section titles are visible on a gradient */
