@@ -124,3 +124,115 @@ function LoginPage() {
                     onClick={handleUpdate}
                     className="mt-2 px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
                   >
+                    Refresh to Update
+                  </button>
+                </div>
+              )}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      {/* Welcome text */}
+      <div className="text-sm font-sans bg-yellow-100 w-[90%] rounded-xl text-black flex flex-wrap">
+        Welcome to Attendance System. <br />
+        <ul className="list-disc pl-5">
+          <li className="marker:text-blue-500">Eye Space employees only!</li>
+          <li className="marker:text-blue-500">Your employee ID is userid</li>
+          <li className="marker:text-blue-500">Password hint - contact HO</li>
+          <li className="marker:text-blue-500">You can register your device for attendance.</li>
+          <li className="marker:text-blue-500">Only 1 device for an employee can be registered</li>
+          <li className="marker:text-blue-500">For Re-registration/Update device, contact HO</li>
+        </ul>
+      </div>
+
+      {/* Login Form */}
+      <form onSubmit={handleSubmit} className="gb_center login_card">
+        <table className="gb_table_1 border border-solid gb_center">
+          <tbody>
+            <tr className="border border-solid">
+              <th className="border border-solid gb_blue">Employee login</th>
+            </tr>
+            <tr className="gb_box_1 border border-solid">
+              <th className="gb_box_1 border border-solid">
+                <input
+                  name="emp_id"
+                  type="number"
+                  placeholder="Employee ID"
+                  value={empId}
+                  onChange={(e) => setEmpId(e.target.value)}
+                  required
+                  className="gb_box_1"
+                />
+              </th>
+            </tr>
+            <tr className="border border-solid">
+              <th className="border border-solid">
+                <input
+                  name="pass"
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="gb_box_1"
+                />
+              </th>
+            </tr>
+            <tr className="gb_box_1 border border-solid">
+              <th className="gb_box_1 border border-solid">
+                <button type="submit" className="gb_btn_1 gb_btn_menu_blue">Sign In</button>
+              </th>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+
+      {/* Device Status */}
+      <div className="gb_center login_card w-11/12 mt-5">
+        <table className="gb_table_1 border border-solid border-blue-500">
+          <thead>
+            <tr className="gb_btn_goldenrod border border-solid border-blue-500">
+              <th className="gb_btn_goldenrod border border-solid border-blue-500" colSpan="2">Device Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="border border-solid text-black border-blue-500">Device Token</td>
+              <td className="border border-solid text-black border-blue-500">{tokenStatus}</td>
+            </tr>
+            <tr>
+              <td className="border border-solid border-blue-500 text-black">Latitude</td>
+              <td className="border border-solid border-blue-500 text-black">{location?.lat ?? location?.error ?? "Loading..."}</td>
+            </tr>
+            <tr>
+              <td className="border border-solid text-black border-blue-500">Longitude</td>
+              <td className="border border-solid text-black border-blue-500">{location?.lon ?? location?.error ?? "Loading..."}</td>
+            </tr>
+            <tr className="border border-solid text-black border-blue-500">
+              <td className="border border-solid text-black border-blue-500">Accuracy (m)</td>
+              <td className="border border-solid text-black border-blue-500">{location?.accuracy ?? location?.error ?? "Loading..."}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
+    </div>
+  );
+}
+
+// --- APP Router ---
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/AdminDashboard" element={<AdminDashboard />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;
