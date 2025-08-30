@@ -7,15 +7,6 @@ import Dashboard from "./Dashboard";
 import AdminDashboard from "./AdminDashboard";
 import { registerSW } from 'virtual:pwa-register';
 
-const updateSW = registerSW({
-  onNeedRefresh() {
-    alert('A new version is available! Please refresh.');
-  },
-  onOfflineReady() {
-    console.log('App ready for offline use.');
-  }
-});
-
 
 // ---------------- LOGIN PAGE ----------------
 function LoginPage() {
@@ -61,8 +52,7 @@ function LoginPage() {
   const syncToken = () => {
     setTokenStatus(localStorage.getItem("token") ?? "None");
   };
-
-  	window.addEventListener("storage", syncToken);
+  window.addEventListener("storage", syncToken);
   	return () => window.removeEventListener("storage", syncToken);
   }, []);
     
@@ -129,7 +119,7 @@ function LoginPage() {
 
 
   return (
-    <div class="mt-8 rounded-lg shadow-lg flex flex-col items-center justify-start min-h-screen gap-2">
+    <div className="mt-8 rounded-lg shadow-lg flex flex-col items-center justify-start min-h-screen gap-2">
       {/* Logo */}
       <table className="logo_txt">
         <tbody>
