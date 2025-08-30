@@ -30,6 +30,9 @@ function LoginPage() {
     }
   };
   
+  // ✅ Get location on mount
+  const [location, setLocation] = useState(null);
+  
   useEffect(() => {
   // Version
   fetchManifestVersion();
@@ -56,10 +59,6 @@ function LoginPage() {
   	return () => window.removeEventListener("storage", syncToken);
   }, []);
     
-  // ✅ Get location on mount
-  const [location, setLocation] = useState(null);
-
-  useEffect(() => {
      if (navigator.geolocation) {
       const watchId = navigator.geolocation.watchPosition(
         (pos) =>
