@@ -196,7 +196,9 @@ export async function getAdmins() {
 }
 
 // OTP Calls 
-const API_KEY = process.env.SMS_API_KEY; // 2Factor API key
+// const API_KEY = process.env.VITE_SMS_API_KEY; // 2Factor API key
+const API_KEY = import.meta.env.VITE_SMS_API_KEY;
+
 const BASE_URL = "https://2factor.in/API/V1";
 
 export async function sendOtp(mobile) {

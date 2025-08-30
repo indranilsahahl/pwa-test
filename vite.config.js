@@ -16,7 +16,7 @@ export default defineConfig({
         background_color: '#ffffff',
         display: 'standalone',
         start_url: '/',
-        version: 2.0,
+        version: "2.1",
         icons: [
           {
             src: '/android-chrome-192x192.png',
