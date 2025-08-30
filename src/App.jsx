@@ -5,6 +5,17 @@ import { useNavigate, BrowserRouter, Routes, Route } from "react-router-dom";
 import { login } from "./api.js";
 import Dashboard from "./Dashboard";
 import AdminDashboard from "./AdminDashboard";
+import { registerSW } from 'virtual:pwa-register';
+
+const updateSW = registerSW({
+  onNeedRefresh() {
+    alert('A new version is available! Please refresh.');
+  },
+  onOfflineReady() {
+    console.log('App ready for offline use.');
+  }
+});
+
 
 // ---------------- LOGIN PAGE ----------------
 function LoginPage() {
@@ -13,8 +24,40 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [tokenStatus, setTokenStatus] = useState(localStorage.getItem("token") ?? "None");
+  const [version, setVersion] = useState("");
+  const [updateAvailable, setUpdateAvailable] = useState(false);
 
+  // --- Fetch manifest version ---
+  const fetchManifestVersion = async () => {
+    try {
+      const res = await fetch("/manifest.webmanifest");
+      if (!res.ok) return;
+      const manifest = await res.json();
+      if (manifest.version) setVersion(manifest.version);
+    } catch (err) {
+      console.error("Failed to fetch manifest version:", err);
+    }
+  };
+  
   useEffect(() => {
+  // Version
+  fetchManifestVersion();
+
+    const updateSW = registerSW({
+      onNeedRefresh() {
+        setUpdateAvailable(true);
+      },
+      onOfflineReady() {
+        console.log("App ready for offline use.");
+      },
+    });
+  }, []);
+
+  const handleUpdate = () => {
+    // Force reload to get new version
+    window.location.reload();
+  };
+  // End Version
   const syncToken = () => {
     setTokenStatus(localStorage.getItem("token") ?? "None");
   };
@@ -103,6 +146,20 @@ function LoginPage() {
                 EYE SPACE <br />
               </span>
             </td>
+          </tr>
+          <tr>
+          <td colSpan="2">  {version && <p className="mb-2">App Version: {version}</p>}
+
+      {updateAvailable && (
+        <div className="p-2 bg-yellow-100 border border-yellow-400 rounded">
+          <p>New version available!</p>
+          <button
+            onClick={handleUpdate}
+            className="mt-2 px-4 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+          >
+            Refresh to Update
+          </button>
+        </div>)}</td>
           </tr>
         </tbody>
       </table>

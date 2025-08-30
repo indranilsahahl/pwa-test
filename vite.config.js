@@ -7,14 +7,16 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: { cleanupOutdatedCaches: true },
       manifest: {
         name: 'EsAttendance',
         short_name: 'ESAttendance',
-        description: 'A sample Progressive Web App deployed on Netlify',
-        theme_color: '#ffffff',
+        description: 'Eye Space Attendance System App deployed on Netlify',
+        theme_color: '#000000',
         background_color: '#ffffff',
         display: 'standalone',
         start_url: '/',
+        version: 2.0,
         icons: [
           {
             src: '/android-chrome-192x192.png',
@@ -33,7 +35,7 @@ export default defineConfig({
   server: {
     allowedHosts: [
       'localhost',
-      'devserver-main--gbpwatest.netlify.app'
+      'devserver-main--esattendance.netlify.app'
     ]
   }
 })
