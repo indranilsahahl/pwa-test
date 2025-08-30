@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
       workbox: { cleanupOutdatedCaches: true },
       manifest: {
         name: 'EsAttendance',
