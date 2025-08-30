@@ -156,27 +156,31 @@ function LoginPage() {
             <tr className="gb_box_1 border border-solid">
               <th className="gb_box_1 border border-solid">
                 <input
-                  name="emp_id"
-                  type="number"
-                  placeholder="Employee ID"
-                  value={empId}
-                  onChange={(e) => setEmpId(e.target.value)}
-                  required
-                  className="gb_box_1"
-                />
+			  name="emp_id"
+			  type="number"
+			  placeholder="Employee ID"
+  			  value={empId}
+  			  onChange={(e) => setEmpId(e.target.value)}
+  			  required
+  			  className="gb_box_1"
+  			  autoComplete="username"     // ✅ added
+			/>
+
               </th>
             </tr>
             <tr className="border border-solid">
               <th className="border border-solid">
                 <input
-                  name="pass"
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="gb_box_1"
-                />
+		  name="pass"
+		  type="password"
+		  placeholder="Password"
+		  value={password}
+		  onChange={(e) => setPassword(e.target.value)}
+		  required
+		  className="gb_box_1"
+		  autoComplete="current-password"   // ✅ added
+		/>
+
               </th>
             </tr>
             <tr className="gb_box_1 border border-solid">
