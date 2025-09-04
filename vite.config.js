@@ -7,7 +7,6 @@ import fs from 'fs'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [ /* ... */ ],
   assetsInclude: ['**/*.html'],
   plugins: [
     react(),
