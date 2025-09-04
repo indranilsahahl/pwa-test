@@ -140,11 +140,12 @@ export async function fetchPending() {
 
 // Approve Reject here
 // --- Approve pending attendance ---
-export async function approveAttendance(empId, which_date) {
+export async function approveAttendance(empId, which_date, adminName) {
   const formData = new FormData();
   formData.append("action", "approve");
   formData.append("emp_id", empId);
   formData.append("which_date", which_date);
+  formData.append("approver", adminName);
 
   const response = await fetch(API_BASE, {
     method: "POST",
@@ -159,12 +160,13 @@ export async function approveAttendance(empId, which_date) {
 }
 
 // --- Reject pending attendance ---
-export async function rejectAttendance(empId, which_date) {
+export async function rejectAttendance(empId, which_date, adminName) {
   const formData = new FormData();
   formData.append("action", "reject");
   formData.append("emp_id", empId);
   formData.append("which_date", which_date);
-
+  formData.append("approver", adminName);
+  
   const response = await fetch(API_BASE, {
     method: "POST",
     body: formData,

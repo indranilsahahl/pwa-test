@@ -1,15 +1,12 @@
 [build]
   command = "npm run build"
   publish = "dist"
+  port = 5173
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-[build]
-  command = "npm run build"
-  publish = "dist"
 
 [[headers]]
   for = "/*.js"
@@ -36,3 +33,7 @@
   [headers.values]
     Cache-Control = "no-cache"
 
+[[headers]]
+  for = "/@vite/*"
+  [headers.values]
+    Content-Type = "application/javascript"

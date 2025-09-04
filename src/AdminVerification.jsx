@@ -6,6 +6,7 @@ import { getAdmins, sendOtp, verifyOtp } from "./api.js";
 export default function AdminVerification({ onVerified }) {
   const [admins, setAdmins] = useState([]);
   const [selectedAdmin, setSelectedAdmin] = useState("");
+  const [selectedAdminName, setSelectedAdminName] = useState(""); // New state for admin name
   const [sessionId, setSessionId] = useState("");
   const [otp, setOtp] = useState("");
   const [message, setMessage] = useState("");
@@ -21,7 +22,21 @@ export default function AdminVerification({ onVerified }) {
     }
     fetchAdmins();
   }, []);
-
+ /**	Block for Admin Name */
+ const handleAdminChange = (e) => {
+    const selectedMobile = e.target.value;
+    setSelectedAdmin(selectedMobile);
+    
+    // Find the admin object and store the name
+    const admin = admins.find(admin => admin.mobile === selectedMobile);
+    if (admin) {
+      setSelectedAdminName(admin.name);
+    } else {
+      setSelectedAdminName("");
+    }
+  };
+ /* end block for Admin Name */ 
+	
   const handleDone = async () => {
     if (!selectedAdmin) {
       alert("Please select an admin first");
@@ -45,6 +60,9 @@ export default function AdminVerification({ onVerified }) {
       await verifyOtp(sessionId, otp);
       setMessage("OTP Verified ✅");
       
+       // Store admin name in sessionStorage
+      sessionStorage.setItem('adminName', selectedAdminName);
+      
       if (onVerified) onVerified();
     } catch (err) {
       setMessage(err.message);
@@ -58,7 +76,7 @@ export default function AdminVerification({ onVerified }) {
       <select
         className="gb-custom-select"
         value={selectedAdmin}
-        onChange={(e) => setSelectedAdmin(e.target.value)}
+        onChange={handleAdminChange}
       >
         <option value="">-- Select Admin --</option>
         {admins.map((admin, i) => (

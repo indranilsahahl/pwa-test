@@ -1,3 +1,5 @@
+//✅  AdminDashboard.jsx
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchPending, approveAttendance, rejectAttendance } from "./api.js";
@@ -13,7 +15,17 @@ export default function AdminDashboard({ reloadTrigger }) {
   const [pendingStatus, setPendingStatus] = useState([]);
   const [error, setError] = useState("");
   const [otpVerified, setOtpVerified] = useState(false);
+  const [adminName, setAdminName] = useState(""); // New state for admin name
   const navigate = useNavigate();
+
+  // --- Get admin name from sessionStorage on component mount ---
+  useEffect(() => {
+    const storedAdminName = sessionStorage.getItem('adminName');
+    if (storedAdminName) {
+      setAdminName(storedAdminName);
+      setOtpVerified(true); // Auto-verify if admin name exists
+    }
+  }, []);
 
   // --- Logout handler ---
   const onLogout = () => {
@@ -87,22 +99,26 @@ export default function AdminDashboard({ reloadTrigger }) {
     const actionIcon = actionType === "approve" ? "question" : "warning";
     const backendFunc = actionType === "approve" ? approveAttendance : rejectAttendance;
 
+    // Get admin name from state (or sessionStorage as fallback)
+    const currentAdminName = adminName || sessionStorage.getItem('adminName') || 'Admin';
+
     showConfirmDialog({
       title: `${actionText} Attendance?`,
-      text: `Do you want to ${actionText.toLowerCase()} attendance for ${empid} on ${which_date}?`,
+      text: `Do you want to ${actionText.toLowerCase()} attendance for ${empid} on ${which_date}?\n\nAction by: ${currentAdminName}`,
       confirmText: `Yes, ${actionText}`,
       icon: actionIcon,
       onConfirm: async () => {
         try {
           const backendDate = formatDateForBackend(which_date);
-          await backendFunc(empid, backendDate);
+          // Pass admin name to the API functions
+          await backendFunc(empid, backendDate, currentAdminName);
           setPendingStatus((prev) =>
             prev.filter((r) => !(r.empid === empid && r.which_date === which_date))
           );
           await MySwal.fire({
             icon: "success",
             title: `${actionText}d!`,
-            text: `Attendance has been ${actionText.toLowerCase()}d.`,
+            text: `Attendance has been ${actionText.toLowerCase()}d by ${currentAdminName}.`,
             timer: 2000,
             showConfirmButton: false,
           });
@@ -118,6 +134,15 @@ export default function AdminDashboard({ reloadTrigger }) {
         }
       },
     });
+  };
+
+  // --- Handle OTP verification ---
+  const handleVerified = () => {
+    const storedAdminName = sessionStorage.getItem('adminName');
+    if (storedAdminName) {
+      setAdminName(storedAdminName);
+    }
+    setOtpVerified(true);
   };
 
   // --- Render ---
@@ -136,6 +161,7 @@ export default function AdminDashboard({ reloadTrigger }) {
               </td>
               <td>
                 <h1 className="gb-title gb_blue gb_hover_blue">Admin Dashboard</h1>
+                {adminName && <p className="text-sm text-gray-600">Logged in as: {adminName}</p>}
                 <button className="gb_btn_red" onClick={onLogout}>
                   Logout
                 </button>
@@ -145,9 +171,9 @@ export default function AdminDashboard({ reloadTrigger }) {
         </table>
       </section>
 
-      <AdminVerification onVerified={() => setOtpVerified(true)} />
-
-      {otpVerified && (
+      {!otpVerified ? (
+        <AdminVerification onVerified={handleVerified} />
+      ) : (
         <section className="gb-card">
           <h2>Pending Log</h2>
           {error && <div className="text-red-600">{error}</div>}

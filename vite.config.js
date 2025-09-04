@@ -1,8 +1,14 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
+import fs from 'fs'
 
+// vite.config.js
+
+// https://vitejs.dev/config/
 export default defineConfig({
+  plugins: [ /* ... */ ],
+  assetsInclude: ['**/*.html'],
   plugins: [
     react(),
     VitePWA({
@@ -33,9 +39,9 @@ export default defineConfig({
     })
   ],
   server: {
-    allowedHosts: [
-      'localhost',
-      'devserver-main--esattendance.netlify.app'
-    ]
+  host: true,
+  port: 5173,
+  allowedHosts: ["esattendance.loca.lt"]
   }
+
 })
