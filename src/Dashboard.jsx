@@ -216,7 +216,7 @@ export default function Dashboard() {
               <td>
                 <h1 className="gb-title gb_crimson">Dashboard</h1>
                 <button className="gb-btn danger" onClick={onLogout}>
-                  Logout
+                  Sign Out
                 </button>
               </td>
             </tr>
