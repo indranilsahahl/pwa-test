@@ -147,14 +147,14 @@ function LoginPage() {
       </div>
 
       {/* Login Form */}
-      <form onSubmit={handleSubmit} className="gb_center login_card">
+      <form onSubmit={handleSubmit} className="gb_center bg-amber-100 login_card">
         <table className="gb_table_1 border border-solid gb_center">
-          <tbody>
-            <tr className="border border-solid">
+          <tbody className="bg-amber-100">
+            <tr className="border border-solid bg-amber-100">
               <th className="border border-solid gb_blue">Employee login</th>
             </tr>
-            <tr className="gb_box_1 border border-solid">
-              <th className="gb_box_1 border border-solid">
+            <tr className="gb_box_1 border border-solid bg-amber-100">
+              <th className="gb_box_1 border border-solid bg-amber-100">
                 <input
 			  name="emp_id"
 			  type="number"
@@ -162,14 +162,15 @@ function LoginPage() {
   			  value={empId}
   			  onChange={(e) => setEmpId(e.target.value)}
   			  required
-  			  className="gb_box_1"
+  			  className="gb_box_1 bg-sky-100 text-red-900
+              border border-gray-300 rounded"
   			  autoComplete="username"     // ✅ added
 			/>
 
               </th>
             </tr>
-            <tr className="border border-solid">
-              <th className="border border-solid">
+            <tr className="border border-solid bg-amber-100">
+              <th className="border border-solid bg-amber-100">
                 <input
 		  name="pass"
 		  type="password"
@@ -177,14 +178,14 @@ function LoginPage() {
 		  value={password}
 		  onChange={(e) => setPassword(e.target.value)}
 		  required
-		  className="gb_box_1"
+		  className="gb_box_1 bg-sky-100 text-red-900
+              border border-gray-300 rounded"
 		  autoComplete="current-password"   // ✅ added
 		/>
-
               </th>
             </tr>
-            <tr className="gb_box_1 border border-solid">
-              <th className="gb_box_1 border border-solid">
+            <tr className="gb_box_1 border border-solid bg-amber-100">
+              <th className="gb_box_1 border border-solid bg-amber-100">
                 <button type="submit" className="gb_btn_1 gb_btn_menu_blue">Sign In</button>
               </th>
             </tr>
