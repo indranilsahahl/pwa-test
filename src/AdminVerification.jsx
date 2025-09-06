@@ -98,7 +98,8 @@ export default function AdminVerification({ onVerified }) {
           <input
             type="text"
             placeholder="Enter OTP"
-            className="gb_box_1"
+            className="gb_box_1 bg-sky-100 text-red-900
+              border border-gray-300 rounded"
             value={otp}
             onChange={(e) => setOtp(e.target.value)}
           />
