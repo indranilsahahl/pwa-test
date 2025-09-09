@@ -14,7 +14,15 @@ export default function Dashboard() {
   const [claimResult, setClaimResult] = useState("");
   const [geo, setGeo] = useState({ lat: null, long: null, accuracy: null, error: null });
   const [distance, setDistance] = useState(null);
-
+  // Create a ref to track the latest distance value
+  const distanceRef = useRef(null);
+  
+  // Update both state and ref when distance changes
+  const updateDistance = (d) => {
+    setDistance(d);
+    distanceRef.current = d;
+  }; 
+	
   // bump this to force re-read of sessionStorage-backed memo
   const [storageTick, setStorageTick] = useState(0);
 
@@ -78,7 +86,7 @@ export default function Dashboard() {
             : null;
 
         setGeo({ lat: latitude, long: longitude, accuracy, error: null });
-        setDistance(d);
+        updateDistance(d);
       },
       (err) => setGeo((g) => ({ ...g, error: err.message || "Unable to fetch location" })),
       { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
@@ -126,12 +134,12 @@ export default function Dashboard() {
   	}
    };
   const handleAttendanceLogin = async () => {
-  	await callApi(attendanceLogin, empId, today, distance);
+  	await callApi(attendanceLogin, empId, today, distanceRef.current);
   	await getAttendanceStat();
   	setLogTick((t) => t + 1); // trigger AttendanceLog to reload
   };
   const handleAttendanceLogout = async () => {
-  	await callApi(attendanceLogout, empId, today, distance);
+  	await callApi(attendanceLogout, empId, today, distanceRef.current);
   	await getAttendanceStat();
   	setLogTick((t) => t + 1); // trigger AttendanceLog to reload
   };
