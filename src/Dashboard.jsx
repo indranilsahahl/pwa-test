@@ -1,5 +1,5 @@
 //✅ Daashboard.jsx
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { claimDevice, attendanceCheck, attendanceLogin, attendanceLogout } from "./api.js";
 import AttendanceEntry from "./AttendanceEntry";
